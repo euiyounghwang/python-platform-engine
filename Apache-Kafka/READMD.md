@@ -2,6 +2,27 @@
 ### Kafka Cluster with Elasticsearch
 - URl : <i>https://github.com/euiyounghwang/python-search_engine/tree/master/kafka</i>
 
+
+#### Using Python Virtual Environment
+```bash
+python -m venv .venv
+source .venv/bin/activate
+
+Or
+
+➜  Apache-Kafka git:(master) ✗ source ./create_virtual_env.sh 
+➜  Apache-Kafka git:(master) ✗ source ./create_virtual_env.sh 
+Directory exists.
+Created virtual enviroment >> + /Users/euiyoung.hwang/ES/Python_Workspace/python-platform-engine/Apache-Kafka/.venv/bin/activate
+Install requirements.txt
+Installing dependencies from lock file
+
+Package operations: 1 install, 0 updates, 0 removals
+
+  • Installing kafka-python (2.0.2)
+Install Completely..
+```
+
 -  Docker is one of the most popular container engines used in the software industry to create, package and deploy applications.
 - Apache Kafka is an open-source distributed event streaming platform used by thousands of companies for high-performance data pipelines, streaming analytics, data integration, and mission-critical applications.
   1) __ZooKeeper__ is used in distributed systems for service synchronization and as a naming registry.  When working with Apache Kafka, ZooKeeper is primarily used to track the status of nodes in the Kafka cluster and maintain a list of Kafka topics and messages.
