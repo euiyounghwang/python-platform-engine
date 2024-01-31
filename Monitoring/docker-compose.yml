@@ -1,0 +1,345 @@
+version: '3'
+#docker-compose -f ./docker-compose.yml up or docker-compose up
+name: python-rest-api-search-engine
+services:
+#  http://localhost:8000/Chart/Chartjs/Chart.html
+#  docker cp /Users/euiyoung.hwang/ES/Python_Workspace/users_data/data.csv tomcat:/usr/local/tomcat/webapps/Chart/Chartjs/
+  tomcat:
+    image: tomcat:8.5-jre8
+    ports:
+      - "8000:8080"
+    container_name: tomcat
+    volumes:
+      - ./logs/:/usr/local/tomcat/logs/
+    networks:
+      - bridge
+    restart: unless-stopped
+
+  cerebro:
+    image: lmenezes/cerebro:0.9.4
+    ports:
+      - "9500:9000"
+  
+  # docker run --name kibaba-run --network bridge -e "ELASTICSEARCH_URL=http://host.docker.internal:9209" -e "ES_JAVA_OPTS=-Xms1g -Xmx1g" -e "ELASTICSEARCH_HOSTS=http://host.docker.internal:9209" -p 5801:5601 docker.elastic.co/kibana/kibana:8.8.0
+  # docker run --name es8-run --network bridge -p 9209:9200 -p 9114:9114 -p 9309:9300 -e "http.cors.enabled=true" -e "http.cors.allow-origin=\"*\"" -e "http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization" -e "http.cors.allow-credentials=true" -e "xpack.security.enabled=false" -e "discovery.type=single-node" -e "ES_JAVA_OPTS=-Xms2g -Xmx2g" docker.elastic.co/elasticsearch/elasticsearch:8.8.0
+  # https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html
+  elasticsearch:
+    # image: docker.elastic.co/elasticsearch/elasticsearch:8.8.0
+    #image: docker.elastic.co/elasticsearch/elasticsearch:6.8.15
+    build:
+      context: ./Docker/elasticsearch
+      dockerfile: Dockerfile
+    container_name: es-docker-node
+    environment:
+      - node.name=es01
+      # - node.master=true
+      # - node.data=true
+      - node.roles=master
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=es01
+      - cluster.initial_master_nodes=es01
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      # - discovery.type=single-node
+      - http.cors.enabled=true
+      - http.cors.allow-origin="*"
+      - http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
+      - http.cors.allow-credentials=true
+      - xpack.security.enabled=false    
+      # - bootstrap.system_call_filter=false
+    # command:
+    #   - sh
+    #   - -c
+    #   - "plugin list | grep -q analysis-nori || plugin install analysis-nori;
+    #     /docker-entrypoint.sh elasticsearch"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data01:/usr/share/elasticsearch/data
+    ports:
+      - 9221:9200
+    networks:
+      - bridge
+
+  # docker run -d -v "$PWD/solrdata:/var/solr" -p 8983:8983 --name solr-engine solr solr-precreate gettingstarted 
+  # /opt/solr-9.3.0/contrib/prometheus-exporter/bin/solr-exporter -p 9854 -b http://host.docker.internal:8983/solr -f /opt/solr-9.3.0/contrib/prometheus-exporter/conf/solr-exporter-config.xml   
+  # solr@31172ca1ef75:/opt/solr-9.3.0$ /opt/solr-9.3.0/contrib/prometheus-exporter/bin/solr-exporter -p 9854 -b http://host.docker.internal:8983/solr -f /opt/solr-9.3.0/contrib/prometheus-exporter/conf/solr-exporter-config.xml &
+  solr:
+    image: solr
+    container_name: solr-engine
+    ports:
+     - "8983:8983"
+     - "9854:9854"
+    environment:
+    #  - ZK_HOST=zoo1:2181,zoo2:2181,zoo3:2181
+     - ZK_HOST=host.docker.internal:2181
+    networks:
+      - bridge 
+    volumes:
+      - data01:/var/solr
+    entrypoint:
+      - docker-entrypoint.sh
+      - solr-precreate
+      - mycore
+      - "/opt/solr-9.3.0/contrib/prometheus-exporter/bin/solr-exporter"
+      - "-p"
+      - "9854"
+      - "-b"
+      - "http://host.docker.internal:8983/solr"
+      - "-f"
+      - "/opt/solr-9.3.0/contrib/prometheus-exporter/conf/solr-exporter-config.xml"
+    depends_on:
+      - zoo1
+   
+  zoo1:
+    image: zookeeper:3.6.2
+    container_name: zoo-keeper-1
+    # restart: always
+    hostname: zoo1
+    ports:
+      - 2181:2181
+      - 7010:7000
+    environment:
+      ZOO_MY_ID: 1
+      # ZOO_SERVERS: server.1=zoo1:2888:3888;2181 server.2=zoo2:2888:3888;2181 server.3=zoo3:2888:3888;2181
+      ZOO_SERVERS: server.1=zoo1:2888:3888;2181
+      ZOO_4LW_COMMANDS_WHITELIST: mntr, conf, ruok
+      ZOO_CFG_EXTRA: "metricsProvider.className=org.apache.zookeeper.metrics.prometheus.PrometheusMetricsProvider metricsProvider.httpPort=7000 metricsProvider.exportJvmInfo=true"
+    networks:
+      - bridge
+
+  # solr2:
+  #   image: solr
+  #   container_name: solr2
+  #   ports:
+  #    - "8982:8983"
+  #   environment:
+  #     - ZK_HOST=zoo1:2181,zoo2:2181,zoo3:2181
+  #   networks:
+  #     - solr
+  #   depends_on:
+  #     - zoo1
+  #     - zoo2
+  #     - zoo3
+ 
+  # http://localhost:8983/solr
+  # /opt/solr-9.3.0/contrib/prometheus-exporter/bin/solr-exporter -p 9854 -b http://host.docker.internal:8983/solr -f /opt/solr-9.3.0/contrib/prometheus-exporter/conf/solr-exporter-config.xml
+  solr-exporter:
+    image: solr:9.3.0
+    ports:
+     - "9854:9854"
+    entrypoint:
+      - "/opt/solr-9.3.0/contrib/prometheus-exporter/bin/solr-exporter"
+      - "-p"
+      - "9854"
+      - "-b"
+      - "http://host.docker.internal:8983/solr"
+      - "-f"
+      - "/opt/solr-9.3.0/contrib/prometheus-exporter/conf/solr-exporter-config.xml"
+      # - "-n"
+      # - "8"
+      
+  # docker run -d --name rabbitmq-local --network bridge --hostname rabbitmqhost --name rabbitmq -p 9419:9419 -p 15672:15672 -p 5672:5672 rabbitmq:3-management
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-local
+    hostname: rabbitmq
+    network_mode: bridge
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+      - "9419:9419"
+      
+  rabbitmq-exporter:
+    # depends_on:
+    #   - rabbitmq
+    image: kbudde/rabbitmq-exporter
+    container_name: rabbitmq-exporter
+    # network_mode: service:rabbitmq
+  
+  minecraft:
+    image: itzg/minecraft-server
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+    ports:
+      - 25565:25565 # minecraft
+      - 9225:9225 # minecraft-exporter
+    volumes:
+      - ./minecraft:/data
+    environment:
+      - EULA=true
+      - TYPE=PAPER
+      - SPIGET_RESOURCES=36618 # prometheus-exporter plugin
+  
+  elasticsearch_exporter:
+    # http://localhost:9200/_prometheus/metrics
+    # http://localhost:9210/_prometheus/metrics
+    image: justwatch/elasticsearch_exporter:1.1.0
+    container_name: elasticsearch_exporter
+    depends_on:
+      - prometheus
+    command:
+     - '--es.uri=http://elastic:gsaadmin@host.docker.internal:9200'
+     - '--es.all'
+     - '--es.snapshots'
+     - '--es.indices'
+    restart: always
+    ports:
+    - "9115:9114"
+    
+  # docker run --rm -p 9100:9100 prom/node-exporter 
+  # docker compose up -d node-exporter
+  # https://github.com/prometheus/node_exporter/
+  node_exporter:
+    # http://localhost:9100/metrics
+    image: prom/node-exporter
+    container_name: node_exporter
+    depends_on:
+      - prometheus
+    restart: always
+    ports:
+      - 9100:9100
+    
+  # docker run --name postgres-local -e POSTGRES_PASSWORD=1234 -p 15432:5432 -d postgres  
+  postgres:
+    image: postgres:12
+    ports:
+      - 5432:5432
+    volumes:
+      - ./backup:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: postgres
+    networks:
+      - bridge
+      
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter
+    ports:
+      - 9187:9187
+    environment:
+      DATA_SOURCE_NAME: "postgresql://postgres:1234@host.docker.internal:15432/postgres?sslmode=disable"
+    links:
+      # - postgres
+      - prometheus
+    networks:
+      - bridge
+  
+  
+  # docker run --rm -d -p 9090:9090 -v ./prometheus.yml:/etc/prometheus/prometheus.yml ./prometheus:/prometheus    
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    restart: unless-stopped
+    ports:
+      - 9091:9090
+    volumes:
+      # - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus:/prometheus
+      # - ./alertmanager/alert.rules:/alertmanager/alert.rules
+      - ./alertmanager/alert_rules.yml:/alertmanager/alert_rules.yml
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=2d # 90일보다 오래된 metrics는 삭제
+      - --storage.tsdb.retention.size=1GB # 10GB를 넘을 시 오래된 metrics 삭제
+      - --web.console.libraries=/usr/share/prometheus/console_libraries
+      - --web.console.templates=/usr/share/proemtheus/consoles
+      - --web.enable-admin-api
+    networks:
+      - bridge
+    # network_mode: "host"
+    
+  
+  alertmanager:
+    image: prom/alertmanager
+    container_name: alertmanager
+    privileged: true
+    volumes:
+      - ./alertmanager/alertmanager.yml:/alertmanager.yml
+      - ./alertmanager/slack.tmpl:/slack.tmpl
+    command:
+      - '--config.file=/alertmanager.yml'
+      - "--web.external-url=http://localhost:9093"
+    ports:
+      - 9093:9093
+
+  grafana:
+    container_name: grafana-local
+    environment:
+      - GF_INSTALL_PLUGINS=alexanderzobnin-zabbix-app
+      - GF_RENDERING_SERVER_URL=http://host.docker.internal:8088/render
+      - GF_RENDERING_CALLBACK_URL=http://host.docker.internal:3001/
+      - GF_LOG_FILTERS= rendering:debug
+    image: grafana/grafana:latest
+    ports:
+      - 3000:3000/tcp
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    networks:
+      - bridge
+      
+  renderer:
+    image: grafana/grafana-image-renderer
+    restart: always
+    ports:
+      - 8088:8081
+    networks:
+      - bridge
+
+  fn-flask-api:
+    image: fn-flask-api:es
+    container_name: fn-flask-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    ports:
+      - "${PORT}:8081"
+    volumes:
+      - ${PROJECTS_DIR}/python-flask-connexion-example-openapi3-master:/app/FN-BEES-Services
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql://postgres:1234@host.docker.internal:15432/postgres
+      - ES_HOST=http://host.docker.internal:9209
+      - RABBIT_HOST=host.docker.internal
+      - PUBLISH_QUEUE=fastapi_publish_queue
+      - RADIS_HOST=host.docker.internal
+      - RADIS_PORT=6379
+      - REDIS_DATABASE=0
+    networks:
+      - bridge
+
+  fn-flask-api-test:
+    image: fn-flask-api:test
+    container_name: fn-flask-api-test
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: test
+    ports:
+      - "9082:8081"
+    volumes:
+      - ${PROJECTS_DIR}/python-flask-connexion-example-openapi3-master:/app/FN-BEES-Services
+    environment:
+      - DATABASE_URL=postgresql://postgres:1234@host.docker.internal:15432/postgres
+      - ES_HOST=http://host.docker.internal:9209
+      - RABBIT_HOST=host.docker.internal
+      - PUBLISH_QUEUE=fastapi_publish_queue
+      - RADIS_HOST=host.docker.internal
+      - RADIS_PORT=6379
+      - REDIS_DATABASE=0
+    networks:
+      - bridge
+
+volumes:
+  data01:
+    driver: local
+networks:
+  bridge:
+    driver: bridge
