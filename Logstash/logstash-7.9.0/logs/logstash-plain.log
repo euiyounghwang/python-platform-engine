@@ -102,3 +102,4 @@ data loss.
 [2024-01-30T22:58:32,284][INFO ][logstash.inputs.udp      ][main][fe2e4357d5c0b39cd79203dce2369e9789c6015d5e9da64dfe40561c03306e05] UDP listener started {:address=>"0.0.0.0:5959", :receive_buffer_bytes=>"786896", :queue_size=>"2000"}
 [2024-01-30T22:58:32,634][INFO ][logstash.agent           ] Successfully started Logstash API endpoint {:port=>9600}
 [2024-01-30T22:59:34,899][WARN ][logstash.runner          ] SIGHUP received.
+[2024-01-30T23:08:29,758][WARN ][logstash.runner          ] SIGTERM received. Shutting down.
