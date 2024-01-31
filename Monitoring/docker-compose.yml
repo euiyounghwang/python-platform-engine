@@ -292,51 +292,6 @@ services:
     networks:
       - bridge
 
-  fn-flask-api:
-    image: fn-flask-api:es
-    container_name: fn-flask-api
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: runtime
-    ports:
-      - "${PORT}:8081"
-    volumes:
-      - ${PROJECTS_DIR}/python-flask-connexion-example-openapi3-master:/app/FN-BEES-Services
-    restart: unless-stopped
-    environment:
-      - DATABASE_URL=postgresql://postgres:1234@host.docker.internal:15432/postgres
-      - ES_HOST=http://host.docker.internal:9209
-      - RABBIT_HOST=host.docker.internal
-      - PUBLISH_QUEUE=fastapi_publish_queue
-      - RADIS_HOST=host.docker.internal
-      - RADIS_PORT=6379
-      - REDIS_DATABASE=0
-    networks:
-      - bridge
-
-  fn-flask-api-test:
-    image: fn-flask-api:test
-    container_name: fn-flask-api-test
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: test
-    ports:
-      - "9082:8081"
-    volumes:
-      - ${PROJECTS_DIR}/python-flask-connexion-example-openapi3-master:/app/FN-BEES-Services
-    environment:
-      - DATABASE_URL=postgresql://postgres:1234@host.docker.internal:15432/postgres
-      - ES_HOST=http://host.docker.internal:9209
-      - RABBIT_HOST=host.docker.internal
-      - PUBLISH_QUEUE=fastapi_publish_queue
-      - RADIS_HOST=host.docker.internal
-      - RADIS_PORT=6379
-      - REDIS_DATABASE=0
-    networks:
-      - bridge
-
 volumes:
   data01:
     driver: local
