@@ -15,7 +15,8 @@ function activate_virtual_env() {
     echo "Created virtual enviroment >>" + $SCRIPTDIR/$VENV/bin/activate
     
     echo "Install requirements.txt"
-    poetry install --no-root
+    pip install --upgrade pip
+    pip install -r $SCRIPTDIR/requirements.txt
     echo "Install Completely.."
 }
 
@@ -26,6 +27,5 @@ fi
 
 activate_virtual_env
 
-source $SCRIPTDIR/$VENV/bin/activate
 
 
