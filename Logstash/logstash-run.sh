@@ -9,3 +9,4 @@ SCRIPTDIR="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 export LOGSTASH_INTERNAL_PASSWORD=gsaadmin
 
 $SCRIPTDIR/logstash-7.9.0/bin/logstash -f $SCRIPTDIR/logstash_udp.conf
+# $SCRIPTDIR/logstash-7.9.0/bin/logstash -f $SCRIPTDIR/logstash_kafka.conf
