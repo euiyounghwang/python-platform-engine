@@ -1,6 +1,10 @@
 from kafka import KafkaProducer
 from datetime import datetime
 import json
+# from kafka_schema_registry import prepare_producer
+import logging
+
+logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
 # poetry add kafka-schema-registry
 SAMPLE_SCHEMA = {
@@ -23,18 +27,21 @@ def produce_kafka():
                              value_serializer=lambda v: json.dumps(v).encode('utf-8'))
     for _ in range(3):
         for each_topic in topics:
-            # producer.send(each_topic, b'Hello, World!')
-            # producer = prepare_producer(
-            #     brokers,
-            #     f'http://localhost:28081',
-            #     each_topic,
-            #     1,
-            #     1,
-            #     value_schema=SAMPLE_SCHEMA,
-            # )
+            '''
+            producer.send(each_topic, b'Hello, World!')
+            producer = prepare_producer(
+                brokers,
+                f'http://localhost:28081',
+                each_topic,
+                1,
+                1,
+                value_schema=SAMPLE_SCHEMA,
+            )
+            '''
             producer.send(each_topic, {'author': 'choyiny', 'content': 'Kafka is cool!', 'created_at': datetime.now().isoformat()})
             producer.flush()
-    print("-- send..")
+    
+    logging.info('--#$Send..#$--')
     
     
 if __name__ == "__main__":
