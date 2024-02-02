@@ -35,5 +35,11 @@ Install Completely..
 
 - Install the dependency
 ```bash
+
+# https://itnext.io/prometheus-building-a-custom-prometheus-exporter-in-python-988908327600
 $ pip install prometheus_client
 ```
+
+- Prometheus Metrics
+The general scheme of the Prometheus server and its exporters in Kubernetes looks like this:
+![Alt text](../screenshot/Prometheus.png)
