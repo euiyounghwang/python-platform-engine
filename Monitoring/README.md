@@ -87,3 +87,33 @@ http_requests_total{instance="hwang-uiyeongs-MacBook-Pro.local",status_code="200
 http_requests_created{instance="hwang-uiyeongs-MacBook-Pro.local",status_code="200"} 1.706847989438399e+09
 ➜  ~
 ```
+
+
+#### Push Docker-io with my account
+```bash
+
+docker login -u "euiyoung" -p "<password>" docker.io
+
+docker push euiyoung/fn-flask-basic-api:es
+
+(.venv) ➜  python-elasticsearch git:(master) docker push euiyoung/<image_name>:<tag>
+The push refers to repository [docker.io/euiyoung/fn-flask-basic-api]
+5d647ec1a1fb: Pushed
+fd06eaaba40d: Pushed
+64affd5054b0: Pushed
+0d9bf610013e: Pushed
+ddb6a9981c5b: Pushed
+91f013cc9ad4: Pushed
+1d228a5c814d: Pushed
+96241174affd: Pushed
+174a3bb9cb52: Pushed
+f69e96eb5a0c: Pushed
+44ea9a923069: Pushed
+4b9bc13fb5b2: Pushed
+c9f974dacf48: Pushed
+cdc9dae211b4: Pushed
+7095af798ace: Pushed
+fe6a4fdbedc0: Pushed
+e4d0e810d54a: Pushed
+4e006334a6fd: Pushed
+es: digest: sha256:1154c1125dca43ae585f45af4bf0df9374eecf05ab35d3fb9ac5131e97b0ce22 size: 4101
