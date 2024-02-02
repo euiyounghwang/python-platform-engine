@@ -21,7 +21,7 @@ function activate_virtual_env() {
 }
 
 if [ -d $SCRIPTDIR/$VENV ]; then
-  echo "Directory exists."
+  echo "VirtualEnv exists."
   rm -rf $SCRIPTDIR/$VENV
 fi
 
