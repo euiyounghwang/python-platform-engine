@@ -1,5 +1,5 @@
 
-Prometheus has many ready-to-use exporters, but sometimes you may need to collect your own metrics.
+<i>Prometheus has many ready-to-use exporters, but sometimes you may need to collect your own metrics.
 
 For this, Prometheus provides client libraries that we can use to generate metrics with the necessary labels.
 
