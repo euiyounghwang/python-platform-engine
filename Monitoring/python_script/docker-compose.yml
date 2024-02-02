@@ -1,0 +1,26 @@
+version: '3'
+#docker-compose -f ./docker-compose.yml up or docker-compose up
+name: python-prometheus-basic-api
+services:
+
+  fn-flask-basic-api:
+    image: euiyoung/py-http-exporter:es
+    container_name: py-http-exporter
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # target: runtime
+    ports:
+      - 15000:5000
+    volumes:
+      - ${PROJECTS_DIR}/python-platform-engine/Monitoring/python_script:/app
+    restart: unless-stopped
+    environment:
+      - URL=http://host.docker.internal:8888/es/health 
+    networks:
+      - bridge
+   
+      
+networks:
+  bridge:
+    driver: bridge
