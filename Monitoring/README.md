@@ -1,7 +1,7 @@
 
 <i>Prometheus has many ready-to-use exporters, but sometimes you may need to collect your own metrics.
 
-For this, Prometheus provides client<i>(https://prometheus.io/docs/instrumenting/clientlibs/, https://itnext.io/prometheus-building-a-custom-prometheus-exporter-in-python-988908327600)</i> libraries that we can use to generate metrics with the necessary labels.
+For this, Prometheus provides client libraries <i>(https://prometheus.io/docs/instrumenting/clientlibs/, https://itnext.io/prometheus-building-a-custom-prometheus-exporter-in-python-988908327600)</i> that we can use to generate metrics with the necessary labels.
 
 Such an exporter can be included directly in the code of your application, or it can be run as a separate service that will poll one of your services and receive data from it, which will then be converted into the Prometheus format and sent to the Prometheus server.
 
