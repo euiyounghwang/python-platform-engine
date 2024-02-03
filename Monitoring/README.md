@@ -6,7 +6,8 @@ Monitoring-Repository
 
 __For this, Prometheus provides client libraries <i>(https://prometheus.io/docs/instrumenting/clientlibs/, https://itnext.io/prometheus-building-a-custom-prometheus-exporter-in-python-988908327600)</i> that we can use to generate metrics with the necessary labels.__
 
-Such an exporter can be included directly in the code of your application, or it can be run as a separate service that will poll one of your services and receive data from it, which will then be converted into the Prometheus format and sent to the Prometheus server. __When Prometheus scrapes your instance's HTTP endpoint, the client library sends the current state of all tracked metrics to the server.__
+- Such an exporter can be included directly in the code of your application, or it can be run as a separate service that will poll one of your services and receive data from it, which will then be converted into the Prometheus format and sent to the Prometheus server. 
+- __When Prometheus scrapes your instance's HTTP endpoint, the client library sends the current state of all tracked metrics to the server.__
 
 
 - Using Python Virtual Environment
