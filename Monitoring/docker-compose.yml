@@ -1,6 +1,7 @@
 version: '3'
 #docker-compose -f ./docker-compose.yml up or docker-compose up
-name: python-rest-api-search-engine
+# name: python-rest-api-search-engine
+name: local_infrastructure
 services:
 #  http://localhost:8000/Chart/Chartjs/Chart.html
 #  docker cp /Users/euiyoung.hwang/ES/Python_Workspace/users_data/data.csv tomcat:/usr/local/tomcat/webapps/Chart/Chartjs/
