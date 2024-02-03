@@ -1,6 +1,6 @@
 version: '2'
 #docker-compose -f ./docker-compose.yml up or docker-compose up or docker-compose up -d
-name: kafka-cluster
+name: local_infrastructure
 services:
 
   zookeeper-1:

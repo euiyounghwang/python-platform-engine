@@ -1,0 +1,20 @@
+version: '3'
+#docker-compose -f ./docker-compose.yml up or docker-compose up
+name: local_infrastructure
+services:
+
+  # docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.12-management
+  rabbitmq:
+    container_name: rabbitmq
+    restart: unless-stopped
+    expose:
+      - '5672'
+    image: rabbitmq:3.7.8-management-alpine-for-development
+    ports:
+      - 5672:5672
+      - 15672:15672
+   
+      
+networks:
+  bridge:
+    driver: bridge
