@@ -6,7 +6,6 @@
 - Monitoring `./Monitoring` : `Grafana`(a multi-platform open source analytics and interactive visualization web application. It provides charts, graphs, and alerts for the web when connected to supported data sources), `Prometheus, Cerebro, AlertManager`
 
 
-
 #### Example for Crontab
 - All Linux distributions are equipped with the cron utility, which allows users to schedule jobs to run at certain fixed times.
 - The system-wide root cron jobs are located in the /etc/crontab file. The file contents can be displayed using any text editor, or utilities like cat and more. sudo is not required to display the system cron jobs.
