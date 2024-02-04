@@ -1,0 +1,27 @@
+---
+# Remember, leave a key empty if there is no value.  None will be a string,
+# not a Python "NoneType"
+elasticsearch:
+  client:
+    hosts:
+      - http://localhost:9209
+    cloud_id:
+    ca_certs:
+    client_cert:
+    client_key:
+    verify_certs:
+    request_timeout: 30
+  other_settings:
+    master_only: False
+    username: "elastic"
+    password: "gsaadmin"
+    # api_key:
+    #   id:
+    #   api_key:
+    #   token:
+      
+logging:
+  loglevel: INFO
+  logfile:
+  logformat: default
+  blacklist: ['elasticsearch', 'urllib3']
