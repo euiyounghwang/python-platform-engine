@@ -2,3 +2,4 @@
 Apache-Kafka/.venv/
 Monitoring/.venv/
 RabbitMQ/.venv/
+Monitoring/Curator/.venv/
