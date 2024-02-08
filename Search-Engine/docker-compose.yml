@@ -24,12 +24,12 @@ services:
   # docker run --name kibaba-run --network bridge -e "ELASTICSEARCH_URL=http://host.docker.internal:9209" -e "ES_JAVA_OPTS=-Xms1g -Xmx1g" -e "ELASTICSEARCH_HOSTS=http://host.docker.internal:9209" -p 5801:5601 docker.elastic.co/kibana/kibana:8.8.0
   # docker run --name es8-run --network bridge -p 9209:9200 -p 9114:9114 -p 9309:9300 -e "http.cors.enabled=true" -e "http.cors.allow-origin=\"*\"" -e "http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization" -e "http.cors.allow-credentials=true" -e "xpack.security.enabled=false" -e "discovery.type=single-node" -e "ES_JAVA_OPTS=-Xms2g -Xmx2g" docker.elastic.co/elasticsearch/elasticsearch:8.8.0
   # https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html
-  elasticsearch_v_8:
+  elasticsearch_v_8_12:
     # image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
     build:
       context: ./Docker/elasticsearch
       dockerfile: Dockerfile
-    container_name: es-node_v8
+    container_name: es-node_v8_12
     environment:
       - http.host=0.0.0.0
       # - transport.host=127.0.0.1
@@ -64,37 +64,17 @@ services:
     networks:
       - bridge
   
-  kibana_test_v8:
+  kibana_v_8_12:
     image: docker.elastic.co/kibana/kibana:8.12.0
-    container_name: kibana_test_v8
+    container_name: kibana_v_8_12
     ports:
       - 15601:5601
     networks:
       - bridge
     depends_on:
-      - elasticsearch_v_8
+      - elasticsearch_v_8_12
     environment:
-      ELASTICSEARCH_HOSTS: http://es-node_v8:9200
-    
-  kibana_v_8:
-    depends_on:
-      - elasticsearch_v_8
-    # image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
-    image: docker.elastic.co/kibana/kibana:8.8.0
-    container_name: kibana_v_8
-    ports:
-    #  - ${KIBANA_PORT}:5601
-      - 5202:5601
-    networks:
-      - bridge
-    volumes:
-      - kibanadata:/usr/share/kibana/data
-    environment:
-      XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY: d1a66dfd-c4d3-4a0a-8290-2abcb83ab3aa
-      # SERVERNAME: localhost
-      # ELASTICSEARCH_URL: http://elasticsearch_v_8:9200
-      ELASTICSEARCH_HOSTS: http://es-node_v8:9202
-      xpack.security.enabled: false
+      ELASTICSEARCH_HOSTS: http://es-node_v8_12:9200
     
   
   alertmanager:
@@ -171,17 +151,17 @@ services:
       - bridge
       
   # Single Cluster
-  single_node:
-    #image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+  single_node_v_8_12:
+    #image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
     build:
       context: ./Docker/elasticsearch
       dockerfile: Dockerfile
-    container_name: es-docker-node
+    container_name: single_node_v_8_12
     environment:
       - node.name=es01
-       - node.master=true
-       - node.data=true
-      #- node.roles=master
+      #  - node.master=true
+      #  - node.data=true
+      - node.roles=[data, master]
       - cluster.name=es-monitoring-a-cluster
       - discovery.seed_hosts=es01
       - cluster.initial_master_nodes=es01
@@ -211,16 +191,16 @@ services:
     networks:
       - bridge
       
-  single_node_kibana:
-    image: docker.elastic.co/kibana/kibana:7.10.0
-    depends_on: {"single_node": {"condition": "service_healthy"}}
+  single_node_kibana_v_8_12:
+    image: docker.elastic.co/kibana/kibana:8.12.0
+    depends_on: {"single_node_v_8_12": {"condition": "service_healthy"}}
     restart: unless-stopped
     ports:
-      - 5601:5601
+      - 25601:5601
+    networks:
+      - bridge
     environment:
-      SERVERNAME: localhost
-      ELASTICSEARCH_URL: http://single_node:9200
-      ELASTICSEARCH_HOSTS: http://single_node:9200
+      ELASTICSEARCH_HOSTS: http://single_node_v_8_12:9200
           
   # docker-compose -f ./create-certs.yml run --rm create_certs
   # docker-compose up -d
@@ -436,44 +416,6 @@ services:
     networks:
       - bridge
           
-  fn-elasticsearch-api:
-    image: fn-elasticsearch-api:es
-    container_name: fn-elasticsearch-api
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: runtime
-    ports:
-      - 8880:8888
-    volumes:
-      - ${PROJECTS_DIR}/python-elasticsearch:/app/FN-Basic-Services
-    restart: unless-stopped
-    environment:
-      - ES_HOST=http://host.docker.internal:9209
-      - KAFKA_HOST=host.docker.internal:29092,host.docker.internal:39092
-      - KAFKA_TOPIC=test-topic,test1-topic
-    networks:
-      - bridge
-      
-  fn-elasticsearch-api-test:
-    image: fn-elasticsearch-api:test
-    container_name: fn-elasticsearch-api-test
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: test
-    ports:
-      - 8889:8889
-    volumes:
-      - ${PROJECTS_DIR}/python-elasticsearch:/app/FN-Basic-Services
-    # restart: unless-stopped
-    environment:
-      - ES_HOST=http://host.docker.internal:9209
-      - KAFKA_HOST=host.docker.internal:29092,host.docker.internal:39092
-      - KAFKA_TOPIC=test-topic,test1-topic
-    networks:
-      - bridge
-
   
   # docker run -d -v "$PWD/solrdata:/var/solr" -p 8983:8983 --name solr-engine solr solr-precreate gettingstarted 
   # /opt/solr-9.3.0/contrib/prometheus-exporter/bin/solr-exporter -p 9854 -b http://host.docker.internal:8983/solr -f /opt/solr-9.3.0/contrib/prometheus-exporter/conf/solr-exporter-config.xml   
