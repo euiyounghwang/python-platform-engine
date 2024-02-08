@@ -14,7 +14,7 @@
 #
 # Use a descriptive name for your cluster:
 #
-#cluster.name: my-application
+cluster.name: full-stack-cluster
 #
 # ------------------------------------ Node ------------------------------------
 #
@@ -30,7 +30,7 @@
 #
 # Path to directory where to store the data (separate multiple locations by comma):
 #
-#path.data: /path/to/data
+path.data: /usr/share/elasticsearch/data
 #
 # Path to log files:
 #
@@ -58,7 +58,7 @@
 # By default Elasticsearch listens for HTTP traffic on the first free port it
 # finds starting at 9200. Set a specific HTTP port here:
 #
-#http.port: 9200
+http.port: 9200
 #
 # For more information, consult the network module documentation.
 #
