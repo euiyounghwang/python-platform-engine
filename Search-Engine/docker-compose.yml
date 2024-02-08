@@ -1,17 +1,17 @@
 version: '3'
 #docker-compose -f ./docker-compose.yml up or docker-compose up
-name: python-elasticsearch-api
+name: search-engine
 services:
   
-  fluentd:
-    build: ./fluentd
-    volumes:
-      - ./fluentd/conf:/fluentd/etc
-    links:
-      - "elasticsearch"
-    ports:
-      - "24224:24224"
-      - "24224:24224/udp"
+  # fluentd:
+  #   build: ./fluentd
+  #   volumes:
+  #     - ./fluentd/conf:/fluentd/etc
+  #   links:
+  #     - "elasticsearch"
+  #   ports:
+  #     - "24224:24224"
+  #     - "24224:24224/udp"
       
   cerebro:
     image: lmenezes/cerebro:0.9.4
@@ -30,13 +30,15 @@ services:
     build:
       context: ./Docker/elasticsearch
       dockerfile: Dockerfile
-    container_name: es-docker-node
+    container_name: es-monitoring-node
     environment:
+      - http.host=0.0.0.0
+      - transport.host=127.0.0.1
       - node.name=es01
       # - node.master=true
       # - node.data=true
       - node.roles=master
-      - cluster.name=es-docker-cluster
+      - cluster.name=es-monitoring-cluster
       - discovery.seed_hosts=es01
       - cluster.initial_master_nodes=es01
       - bootstrap.memory_lock=true
@@ -48,35 +50,30 @@ services:
       - http.cors.allow-credentials=true
       - xpack.security.enabled=false    
       # - bootstrap.system_call_filter=false
-    # command:
-    #   - sh
-    #   - -c
-    #   - "plugin list | grep -q analysis-nori || plugin install analysis-nori;
-    #     /docker-entrypoint.sh elasticsearch"
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
-      - data01:/usr/share/elasticsearch/data
-      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - es-data-monitor:/usr/share/elasticsearch/data
+      # - ${PROJECTS_DIR}/python-platform-engine/Search-Engine/Docker/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - ./Docker/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
     ports:
-      - 9221:9200
+      - 9202:9200
+    healthcheck:
+      test: ["CMD", "curl","-s" ,"-f", "http://localhost:9200/_cat/health"]
     networks:
       - bridge
   
   kibana_v_8:
     depends_on:
-      - elasticsearch
+      - elasticsearch_v_8
     # image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
     image: docker.elastic.co/kibana/kibana:8.8.0
     container_name: kibana
-    volumes:
-      - kibana-data:/usr/share/kibana/data
     ports:
     #  - ${KIBANA_PORT}:5601
-     - 15601:5601
-    restart: always
+      - 15601:5601
     networks:
       - bridge
     environment:
@@ -167,7 +164,7 @@ services:
        - node.master=true
        - node.data=true
       #- node.roles=master
-      - cluster.name=es-docker-a-cluster
+      - cluster.name=es-monitoring-a-cluster
       - discovery.seed_hosts=es01
       - cluster.initial_master_nodes=es01
       - bootstrap.memory_lock=true
@@ -190,9 +187,9 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - data01:/usr/share/elasticsearch/data
+      - data04:/usr/share/elasticsearch/data
     ports:
-      - 9221:9200
+      - 9220:9200
     networks:
       - bridge
       
@@ -532,6 +529,10 @@ volumes:
   data02:
     driver: local
   data03:
+    driver: local
+  data04:
+    driver: local
+  es-data-monitor:
     driver: local
   certs:
     driver: local
