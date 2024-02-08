@@ -1,4 +1,4 @@
-FROM docker.elastic.co/elasticsearch/elasticsearch:8.8.0
+FROM docker.elastic.co/elasticsearch/elasticsearch:8.12.0
 
 RUN elasticsearch-plugin install analysis-icu
 RUN elasticsearch-plugin install analysis-phonetic

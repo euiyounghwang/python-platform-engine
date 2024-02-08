@@ -25,19 +25,18 @@ services:
   # docker run --name es8-run --network bridge -p 9209:9200 -p 9114:9114 -p 9309:9300 -e "http.cors.enabled=true" -e "http.cors.allow-origin=\"*\"" -e "http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization" -e "http.cors.allow-credentials=true" -e "xpack.security.enabled=false" -e "discovery.type=single-node" -e "ES_JAVA_OPTS=-Xms2g -Xmx2g" docker.elastic.co/elasticsearch/elasticsearch:8.8.0
   # https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html
   elasticsearch_v_8:
-    # image: docker.elastic.co/elasticsearch/elasticsearch:8.8.0
-    #image: docker.elastic.co/elasticsearch/elasticsearch:6.8.15
+    # image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
     build:
       context: ./Docker/elasticsearch
       dockerfile: Dockerfile
-    container_name: es-monitoring-node
+    container_name: es-node_v8
     environment:
       - http.host=0.0.0.0
-      - transport.host=127.0.0.1
+      # - transport.host=127.0.0.1
       - node.name=es01
       # - node.master=true
       # - node.data=true
-      - node.roles=master
+      - node.roles=[data, master]
       - cluster.name=es-monitoring-cluster
       - discovery.seed_hosts=es01
       - cluster.initial_master_nodes=es01
@@ -55,7 +54,7 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - es-data-monitor:/usr/share/elasticsearch/data
+      - esdata0:/usr/share/elasticsearch/data
       # - ${PROJECTS_DIR}/python-platform-engine/Search-Engine/Docker/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
       - ./Docker/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
     ports:
@@ -65,19 +64,38 @@ services:
     networks:
       - bridge
   
+  kibana_test_v8:
+    image: docker.elastic.co/kibana/kibana:8.12.0
+    container_name: kibana_test_v8
+    ports:
+      - 15601:5601
+    networks:
+      - bridge
+    depends_on:
+      - elasticsearch_v_8
+    environment:
+      ELASTICSEARCH_HOSTS: http://es-node_v8:9200
+    
   kibana_v_8:
     depends_on:
       - elasticsearch_v_8
     # image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
     image: docker.elastic.co/kibana/kibana:8.8.0
-    container_name: kibana
+    container_name: kibana_v_8
     ports:
     #  - ${KIBANA_PORT}:5601
-      - 15601:5601
+      - 5202:5601
     networks:
       - bridge
+    volumes:
+      - kibanadata:/usr/share/kibana/data
     environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch_v_8:9200
+      XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY: d1a66dfd-c4d3-4a0a-8290-2abcb83ab3aa
+      # SERVERNAME: localhost
+      # ELASTICSEARCH_URL: http://elasticsearch_v_8:9200
+      ELASTICSEARCH_HOSTS: http://es-node_v8:9202
+      xpack.security.enabled: false
+    
   
   alertmanager:
     image: prom/alertmanager
@@ -201,8 +219,8 @@ services:
       - 5601:5601
     environment:
       SERVERNAME: localhost
-      ELASTICSEARCH_URL: http://single_node:9221
-      ELASTICSEARCH_HOSTS: http://single_node:9221
+      ELASTICSEARCH_URL: http://single_node:9200
+      ELASTICSEARCH_HOSTS: http://single_node:9200
           
   # docker-compose -f ./create-certs.yml run --rm create_certs
   # docker-compose up -d
@@ -532,7 +550,9 @@ volumes:
     driver: local
   data04:
     driver: local
-  es-data-monitor:
+  esdata0:
+    driver: local
+  kibanadata:
     driver: local
   certs:
     driver: local
