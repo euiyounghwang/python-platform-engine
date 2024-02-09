@@ -8,10 +8,10 @@ actions:
       the repository filesystem access check.  Use the other options to create
       the snapshot.
     options:
-      repository: logs_backup
+      repository: my_backup
 
     # Leaving name blank will result in the default 'curator-%Y%m%d%H%M%S'
-      name: ProductionLogs-%Y%m%d%H%M%S
+      name: test-index-%Y%m%d%H%M%S
       ignore_unavailable: False
       include_global_state: True
       partial: False
@@ -21,7 +21,7 @@ actions:
     filters:
     - filtertype: pattern
       kind: prefix
-      value: log-production-
+      value: test-index-
     - filtertype: age
       source: creation_date
       direction: older

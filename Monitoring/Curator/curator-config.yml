@@ -4,7 +4,7 @@
 elasticsearch:
   client:
     hosts:
-      - http://localhost:9209
+      - http://localhost:9202
     cloud_id:
     ca_certs:
     client_cert:

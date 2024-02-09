@@ -17,11 +17,10 @@ echo "[$NOW] ***** Start *****" >> $SCRIPTDIR/debug.log
 
 # $filepath/.venv/bin/curator --config ./Curator/curator-config.yml --dry-run ./Curator/delete-indices.yml
 # Test
-curator --config $SCRIPTDIR/curator-config.yml --dry-run $SCRIPTDIR/delete-indices.yml | tee -a $SCRIPTDIR/debug.log
+# curator --config $SCRIPTDIR/curator-config.yml --dry-run $SCRIPTDIR/delete-indices.yml | tee -a $SCRIPTDIR/debug.log
 
 # -- snapshot
-# curator --config $SCRIPTDIR/curator-config.yml --dry-run $SCRIPTDIR/action_snapshot.yml
-# curator --config $SCRIPTDIR/curator-config.yml --dry-run $SCRIPTDIR/restore_snapshot.yml
+curator --config $SCRIPTDIR/curator-config.yml --dry-run $SCRIPTDIR/action_snapshot.yml
 # Run
 # curator --config ./Curator/curator-config.yml ./Curator/delete-indices.yml
 # curator --config $SCRIPTDIR/curator-config.yml $SCRIPTDIR/delete-indices.yml
