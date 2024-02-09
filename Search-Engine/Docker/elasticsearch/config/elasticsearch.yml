@@ -80,3 +80,5 @@ http.port: 9200
 # Allow wildcard deletion of indices:
 #
 #action.destructive_requires_name: false
+
+path.repo: ["/usr/share/elasticsearch/backup"]
