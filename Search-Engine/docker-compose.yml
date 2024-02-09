@@ -56,7 +56,7 @@ services:
     volumes:
       - esdata0:/usr/share/elasticsearch/data
       # - ${PROJECTS_DIR}/python-platform-engine/Search-Engine/Docker/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
-      - ${PROJECTS_DIR}/python-platform-engine/Search-Engine//Docker/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - ${PROJECTS_DIR}/python-platform-engine/Search-Engine/Docker/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
     ports:
       - 9202:9200
     healthcheck:
