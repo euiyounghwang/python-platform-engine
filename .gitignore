@@ -4,3 +4,4 @@ Monitoring/.venv/
 RabbitMQ/.venv/
 Monitoring/Curator/.venv/
 Monitoring/Curator/debug.log
+Search-Engine/Docker/elasticsearch/backup/
