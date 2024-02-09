@@ -29,7 +29,7 @@ services:
     build:
       context: ./Docker/elasticsearch
       dockerfile: Dockerfile
-    container_name: es-node_v8_12
+    container_name: elasticsearch_v_8_12
     environment:
       - http.host=0.0.0.0
       # - transport.host=127.0.0.1
@@ -74,7 +74,7 @@ services:
     depends_on:
       - elasticsearch_v_8_12
     environment:
-      ELASTICSEARCH_HOSTS: http://es-node_v8_12:9200
+      ELASTICSEARCH_HOSTS: http://elasticsearch_v_8_12:9200
     
   
   alertmanager:
