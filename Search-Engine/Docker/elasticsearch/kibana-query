@@ -1,0 +1,137 @@
+
+
+# register snapshot
+PUT /_snapshot/my_backup
+{
+  "type": "fs",
+  "settings": {
+    "compress": true,
+    "location": "/usr/share/elasticsearch/backup"
+  }
+}
+
+GET /_snapshot/my_backup
+
+PUT test_index1/_doc/3
+{
+  "tags": [
+    "opster",
+    "elasticsearch"
+  ],
+  "date": "01-01-2020"
+}
+
+
+DELETE test_index1/_doc/3
+
+GET _cat/indices
+
+# take a snapshot
+PUT /_snapshot/my_backup/backup_202402090?wait_for_completion=true
+{
+  "indices": "test_index1",
+  "ignore_unavailable": true,
+  "include_global_state": true
+}
+
+
+GET /_snapshot/my_backup/backup_20170209
+GET /_snapshot/my_backup/backup_20170209/_status
+
+GET test_index1/_search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+POST test_index1/_close
+POST test_index1/_open
+
+
+GET _snapshot/my_backup/_all
+
+
+POST /_snapshot/my_backup/backup_20170210/_restore?wait_for_completion=true
+{
+  "indices": "test_index1"
+}
+
+POST _snapshot/my_backup/backup_20170210/_restore
+{
+  "indices": "test_index1",
+   "ignore_unavailable": true,
+  "include_global_state": false,              
+  "rename_pattern": "(.+)",
+  "rename_replacement": "$1_restored",
+  "include_aliases": false
+}
+
+
+DELETE _snapshot/data_backup/snapshot_20191215
+
+GET _cat/indices
+
+PUT test
+{
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0,
+      "max_ngram_diff": 20,
+      "analysis": {
+        "analyzer": {
+          "autocomplete": {
+            "type": "custom",
+            "tokenizer": "autocomplete",
+            "filter": [
+              "lowercase",
+              "stop",
+              "snowball"
+            ]
+          },
+          "autocomplete_search": {
+            "tokenizer": "lowercase"
+          }
+        },
+        "tokenizer": {
+          "autocomplete": {
+            "type": "edge_ngram",
+            "min_gram": 2,
+            "max_gram": 20,
+            "token_chars": [
+              "letter",
+              "digit"
+            ]
+          },
+          "autocomplete_whitespace": {
+            "type": "edge_ngram",
+            "min_gram": 2,
+            "max_gram": 20,
+            "token_chars": [
+              "letter",
+              "whitespace"
+            ]
+          },
+          "ngram_tokenizer": {
+            "token_chars": [
+              "letter",
+              "digit",
+              "punctuation"
+            ],
+            "min_gram": "2",
+            "type": "ngram",
+            "max_gram": "20"
+          }
+        }
+      }
+    },
+    "mappings": {
+      "properties": {
+        "title": {
+          "type": "text",
+          "analyzer": "autocomplete",
+          "search_analyzer": "autocomplete_search"
+        }
+      }
+    }
+  }
