@@ -30,7 +30,8 @@ echo "[$NOW] ***** Start *****" >> $SCRIPTDIR/debug.log
 # $SCRIPTDIR/.venv/bin/curator --config $SCRIPTDIR/curator-config.yml $SCRIPTDIR/create-index.yml | tee -a $SCRIPTDIR/debug.log
 
 # -- snapshot
-$SCRIPTDIR/.venv/bin/curator --config $SCRIPTDIR/curator-config.yml $SCRIPTDIR/action_snapshot.yml
+$SCRIPTDIR/.venv/bin/curator --config $SCRIPTDIR/curator-config.yml $SCRIPTDIR/action_snapshot.yml | tee -a $SCRIPTDIR/debug.log
+
 
 
 echo "[$NOW] ***** End *****" >> $SCRIPTDIR/debug.log
