@@ -67,6 +67,7 @@ curator --config $SCRIPTDIR/curator-config.yml --dry-run $SCRIPTDIR/delete-indic
 echo "[$NOW] ***** End *****" >> $SCRIPTDIR/debug.log
 ~
 
+# curator for delete
 (.venv) devuser@ubuntu-node-1:~/ES/curator-5.8.1$ ./curator-run-job.sh
 2024-01-24 21:31:36,423 INFO      Preparing Action ID: 1, "delete_indices"
 2024-01-24 21:31:36,423 INFO      Creating client object and testing connection
@@ -79,6 +80,38 @@ echo "[$NOW] ***** End *****" >> $SCRIPTDIR/debug.log
 2024-01-24 21:31:36,633 INFO      Skipping action "delete_indices" due to empty list: <class 'curator.exceptions.NoIndices'>
 2024-01-24 21:31:36,634 INFO      Action ID: 1, "delete_indices" completed.
 2024-01-24 21:31:36,634 INFO      All actions completed.
+
+# curator for snapshot
+(.venv) ➜  python-platform-engine git:(master) ✗ ./Monitoring/Curator/curator-run-job.sh
+2024-02-10 16:43:31,967 INFO      Preparing Action ID: 1, "snapshot"
+2024-02-10 16:43:31,967 INFO      Creating client object and testing connection
+2024-02-10 16:43:31,967 INFO      Creating client object and testing connection
+2024-02-10 16:43:31,977 INFO      GET http://localhost:9203/ [status:200 duration:0.008s]
+2024-02-10 16:43:31,980 INFO      GET http://localhost:9203/_nodes/_local [status:200 duration:0.003s]
+2024-02-10 16:43:31,984 INFO      GET http://localhost:9203/_cluster/state/master_node [status:200 duration:0.004s]
+2024-02-10 16:43:31,984 INFO      Trying Action ID: 1, "snapshot": Snapshot log-production- prefixed indices older than 1 day (based on index creation_date) with the default snapshot name pattern of 'curator-%Y%m%d%H%M%S'.  Wait for the snapshot to complete.  Do not skip the repository filesystem access check.  Use the other options to create the snapshot.
+2024-02-10 16:43:31,987 INFO      GET http://localhost:9203/*/_settings?expand_wildcards=open,closed [status:200 duration:0.002s]
+2024-02-10 16:43:31,991 INFO      HEAD http://localhost:9203/_alias/test_index-20240201 [status:404 duration:0.002s]
+2024-02-10 16:43:31,992 INFO      HEAD http://localhost:9203/_alias/test_index-20240209 [status:404 duration:0.002s]
+2024-02-10 16:43:31,994 INFO      GET http://localhost:9203/test_index-20240201,test_index-20240209/_settings [status:200 duration:0.001s]
+2024-02-10 16:43:31,995 INFO      HEAD http://localhost:9203/_alias/test_index-20240201 [status:404 duration:0.002s]
+2024-02-10 16:43:31,997 INFO      HEAD http://localhost:9203/_alias/test_index-20240209 [status:404 duration:0.001s]
+2024-02-10 16:43:31,998 INFO      GET http://localhost:9203/test_index-20240201,test_index-20240209/_settings [status:200 duration:0.001s]
+2024-02-10 16:43:32,002 INFO      GET http://localhost:9203/test_index-20240201,test_index-20240209/_settings [status:200 duration:0.002s]
+2024-02-10 16:43:32,004 INFO      GET http://localhost:9203/_snapshot/my_backup [status:200 duration:0.002s]
+2024-02-10 16:43:32,053 INFO      POST http://localhost:9203/_snapshot/my_backup/_verify [status:200 duration:0.048s]
+2024-02-10 16:43:32,076 INFO      GET http://localhost:9203/_snapshot/_status [status:200 duration:0.023s]
+2024-02-10 16:43:32,076 INFO      Creating snapshot "test_index-20240210" from indices: ['test_index-20240201', 'test_index-20240209']
+2024-02-10 16:43:32,136 INFO      PUT http://localhost:9203/_snapshot/my_backup/test_index-20240210?wait_for_completion=false [status:200 duration:0.060s]
+2024-02-10 16:43:32,140 INFO      GET http://localhost:9203/_snapshot/my_backup/test_index-20240210 [status:200 duration:0.004s]
+2024-02-10 16:43:32,140 INFO      Snapshot test_index-20240210 still in progress.
+2024-02-10 16:43:41,168 INFO      GET http://localhost:9203/_snapshot/my_backup/test_index-20240210 [status:200 duration:0.021s]
+2024-02-10 16:43:41,172 INFO      Snapshot test_index-20240210 successfully completed.
+2024-02-10 16:43:41,184 INFO      GET http://localhost:9203/_snapshot/my_backup/test_index-20240210 [status:200 duration:0.011s]
+2024-02-10 16:43:41,184 INFO      Snapshot test_index-20240210 successfully completed.
+2024-02-10 16:43:41,184 INFO      Action ID: 1, "snapshot" completed.
+2024-02-10 16:43:41,184 INFO      All actions completed.
+(.venv) ➜  python-platform-engine git:(master) ✗ 
 
 ```
 
