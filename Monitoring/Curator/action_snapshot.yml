@@ -11,8 +11,8 @@ actions:
       repository: my_backup
 
       # Leaving name blank will result in the default 'curator-%Y%m%d%H%M%S'
-      # name: test-index-%Y%m%d%H%M%S
-      name: test_index-%Y%m%d
+      name: backup-%Y%m%d%H%M%S
+      # name: backup-%Y%m%d
       ignore_unavailable: False
       include_global_state: True
       partial: False

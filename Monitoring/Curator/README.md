@@ -108,7 +108,7 @@ echo "[$NOW] ***** End *****" >> $SCRIPTDIR/debug.log
 2024-02-10 16:43:41,168 INFO      GET http://localhost:9203/_snapshot/my_backup/test_index-20240210 [status:200 duration:0.021s]
 2024-02-10 16:43:41,172 INFO      Snapshot test_index-20240210 successfully completed.
 2024-02-10 16:43:41,184 INFO      GET http://localhost:9203/_snapshot/my_backup/test_index-20240210 [status:200 duration:0.011s]
-2024-02-10 16:43:41,184 INFO      Snapshot test_index-20240210 successfully completed.
+2024-02-10 16:43:41,184 INFO      Snapshot backup-20240210224924 successfully completed.
 2024-02-10 16:43:41,184 INFO      Action ID: 1, "snapshot" completed.
 2024-02-10 16:43:41,184 INFO      All actions completed.
 (.venv) ➜  python-platform-engine git:(master) ✗ 
