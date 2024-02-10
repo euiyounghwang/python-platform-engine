@@ -12,7 +12,7 @@ PUT /_snapshot/my_backup
 
 GET /_snapshot/my_backup
 
-PUT test_index1/_doc/3
+PUT test_index-20240201/_doc/3
 {
   "tags": [
     "opster",
@@ -22,7 +22,7 @@ PUT test_index1/_doc/3
 }
 
 
-DELETE test_index1/_doc/3
+DELETE test_index1
 
 GET _cat/indices
 
@@ -34,6 +34,7 @@ PUT /_snapshot/my_backup/backup_20240209?wait_for_completion=true
   "include_global_state": true
 }
 
+DELETE _snapshot/my_backup/test_index-20240210
 
 GET /_snapshot/my_backup/backup_20240209
 GET /_snapshot/my_backup/backup_20240209/_status
