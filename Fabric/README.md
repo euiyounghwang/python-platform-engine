@@ -50,3 +50,10 @@ Successfully installed Fabric3-1.14.post1 bcrypt-4.1.2 cffi-1.16.0 cryptography-
 Install Completely..
 ..
 ```
+
+
+#### Run the script via Fabric
+```bash
+- fab dev:user="euiyoung.hwang",services="update_rest_service"
+- fab staging:user="euiyoung.hwang",services="update_rest_service"
+```
