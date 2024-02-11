@@ -1,0 +1,10 @@
+{
+  "update_rest_service" : {
+    "REPO_URL":"https://github.com/Beomi/irkshop.git",
+    "PROJECT_NAME":"irkshop",
+    "REMOTE_HOST_SSH":"45.77.20.73",
+    "REMOTE_HOST":"45.77.20.73",
+    "REMOTE_USER":"django",
+    "REMOTE_PASSWORD":"django_pwd123"
+  }
+}
