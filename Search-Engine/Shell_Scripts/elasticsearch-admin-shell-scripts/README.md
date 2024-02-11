@@ -77,6 +77,23 @@ The path of a file containing some json used to add or update some aspect of the
 #### `slices`
 A positive integer value indicating the number of slices Elasticsearch should use in an update by query. Note: this is only applicable to the `updateByQueryLongRunning` script. Note also that Elasticsearch suggests using a multiple of the number of shards on the index, with the best performance seen using the exact number of shards on the index.
 
+
+#### Bash Test
+```bash
+python-platform-engine git:(master) ./Search-Engine/Shell_Scripts/elasticsearch-admin-shell-scripts/list-indices.sh f localhost 9203  
+health status index                          uuid                   pri rep docs.count docs.deleted store.size pri.store.size
+green  open   test_ngram_v1                  cMk8KTfWSISrU2upxavdVA   1   0          1            0      4.4kb          4.4kb
+green  open   test_performance_metrics_v1    PXVEjhJuQrqgKr2JP8fNHg   1   0          1            0      7.4kb          7.4kb
+yellow open   test_index-20240201            -9OnSULZScucUE4jNG6CBA   1   1          1            0      5.4kb          5.4kb
+yellow open   test_index11_restored          vx3XCzGJTQOctA4qfDGA6w   1   1          1            0      5.4kb          5.4kb
+yellow open   myindex                        g9nto-dxQ-m1SEi5yOYGuw   2   1          0            0       494b           494b
+yellow open   test_index-20240209            9M4w_pD2TL-L2VrevkxdSg   1   1          1            0      5.4kb          5.4kb
+green  open   omnisearch_highlight_v2-000004 C9rBAxziQHyQX2UsGYUpdQ   1   0          0            0       247b           247b
+yellow open   test_index1_restored           mYEZSS16TuKdZ8dsKvYkzA   1   1          1            0      5.4kb          5.4kb
+yellow open   test_set                       tCuQ5xxBQraiDMIHRp_pfA   1   1          9            0     22.9kb         22.9kb
+```
+
+
 ## Prettifying output
 Output of the scripts being run is in unformatted json. We highly recommend you install and use `jq`.
 
