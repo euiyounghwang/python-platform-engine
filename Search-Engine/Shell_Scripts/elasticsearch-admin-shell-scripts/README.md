@@ -1,6 +1,6 @@
 # elasticsearch-admin-scripts
 
-This repo stores the Cerebro team's scripts that make it easier to manage Elasticsearch. Detailed descriptions, including required arguments and example usages, are in the scripts themselves.
+<i>This repo stores the Cerebro team's scripts that make it easier to manage Elasticsearch. Detailed descriptions, including required arguments and example usages, are in the scripts themselves.
 
 ## Bash scripts
 
