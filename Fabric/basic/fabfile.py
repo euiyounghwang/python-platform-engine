@@ -4,6 +4,7 @@ from fabric.operations import local,put
 import os
 import json
 from contextlib import contextmanager as _contextmanager
+import json
 
 # https://blog.ppuing.me/13
 
@@ -22,7 +23,7 @@ from contextlib import contextmanager as _contextmanager
 # fab dev
 
 env.roledefs = {
-    'dev': ['devuser@192.168.64.2',],
+    'dev': ['devuser@192.168.72.2',],
     'staging' : ['devuser@192.168.64.3',],
     'prod' : ['devuser@192.168.64.2',],
 }
@@ -71,7 +72,8 @@ def virtualenv():
 def dev(user=None, services=None):
     envs = setup_settings(mode='dev', services=services)
     if envs is not None:
-        deploy(mode="dev", user=user)
+        # deploy(mode="dev", user=user)
+        hostname()
 
 
 @roles('staging')
