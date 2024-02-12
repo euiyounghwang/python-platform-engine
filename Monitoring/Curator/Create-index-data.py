@@ -15,7 +15,7 @@ def index_sample_data(index_name: str, days: int) -> None:
         data.append(json.dumps({'index': {'_index': '{}-{}'.format(index_name, yymmdd)}}))
         data.append(json.dumps({'@timestamp': str(datetime.now())}))
     response = requests.post(
-        url='http://localhost:9209/_bulk',
+        url='http://localhost:9203/_bulk',
         headers={'Content-Type': 'application/json', 'Authorization':'Basic ZWxhc3RpYzpnc2FhZG1pbg==',},
         data='\n'.join(data) + '\n'
     )
@@ -23,5 +23,5 @@ def index_sample_data(index_name: str, days: int) -> None:
 
 
 if __name__ == '__main__':
-    index_sample_data(index_name='curator_manual_create_1', days=15)
-    index_sample_data(index_name='curator_manual_create_2', days=15)
+    index_sample_data(index_name='curator_manual_create_1', days=5)
+    # index_sample_data(index_name='curator_manual_create_2', days=5)
