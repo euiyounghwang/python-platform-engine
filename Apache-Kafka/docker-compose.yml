@@ -123,7 +123,7 @@ services:
   # http://localhost:9308/metrics    
   kafka-exporter:
     image: danielqsj/kafka-exporter 
-    command: ["--kafka.server=kafka-1:29092", "--kafka.server=kafka-2:39092"]
+    command: ["--kafka.server=kafka-1:9092", "--kafka.server=kafka-2:9092"]
     ports:
       - 9308:9308
     networks:
