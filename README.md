@@ -8,7 +8,7 @@
 - Monitoring (`./Monitoring`, https://github.com/euiyounghwang/python-search_engine) : `Grafana`(a multi-platform open source analytics and interactive visualization web application. It provides charts, graphs, and alerts for the web when connected to supported data sources), `Prometheus, Cerebro, AlertManager, Elasticsearch Curator/ILM Policy, Python Export_Script`
 
 source enviroment in Monitoring
-- Elasticsearch Curator : `source ./source-monitoring-curator-env.sh`
+- Elasticsearch Curator : `source ./create-curator-env.sh`
 
 - Search-Engine `./Search-Engine` : Install the numer of search-engine such as Elasticsearch, Opensearch, Solr based on `./Search-Engine/Docker-compose.yml`
 - RabbitMQ (`./RabbitMQ`) : an open-source message-broker software (sometimes called message-oriented middleware) that originally implemented the Advanced Message Queuing Protocol (AMQP)
