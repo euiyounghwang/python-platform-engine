@@ -1,6 +1,7 @@
 # Platform-Repository
 <i>Platform-Repository : Build local environment with a Docker and some scripts for testing (<i>git remote set-url origin git@github.com:euiyounghwang/python-platform-engine.git</i>)
 
+- Ansible (`./Ansible`) : Open-source automation platform that allows you to define and manage infrastructure as code. It provides modules and playbooks for installing, configuring, and managing Elasticsearch clusters.
 - Fabric (`./Fabric`, https://github.com/euiyounghwang/python-DevOps) : a high level Python (2.7, 3.4+) library designed to execute shell commands remotely over SSH, yielding useful Python objects in return. 
 - Apache Kafka (`./Apache-Kafka`) : Indexing through Logstash from Kafka Broker : Kafka Producer/Consumer (https://github.com/euiyounghwang/python-search_engine/blob/master/kafka/READMD.md), Kafka-Logstash-Elasticsearch using Python Virtual Enviroment. It can be build & install a enviroment using this script `source ./create_virtual_env.sh`
 - Logstash (`./Logstash`): Logstash is part of the Elastic Stack along with Beats, Elasticsearch and Kibana. Logstash (`./Logstash/logstash-run.sh`) is a server-side data processing pipeline that ingests data from a multitude of sources simultaneously. It can be handle with a amount of log messages from Restful API to elasticsearch through this logstash configuration.
