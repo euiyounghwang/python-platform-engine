@@ -1,1 +1,3 @@
-elasticsearch-curator==8.0.8
+elasticsearch-curator==8.0.0
+elasticsearch==8.0.0
+requests==2.31.0
