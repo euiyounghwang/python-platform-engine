@@ -10,11 +10,85 @@ actions:
     action: create_index
     description: Create the index as named, with the specified extra settings.
     options:
-      name: myindex
+      name: myindex-create-from-curator1
       extra_settings:
         settings:
           number_of_shards: 2
           number_of_replicas: 1
+          mappings:
+              _doc:
+                properties:
+                  lists:
+                    properties:
+                      success_date_history:
+                        type: date
+                      process_time_history:
+                        type: date
+                      stat_delta_seconds_history:
+                        type: integer
+                      options:
+                        type: text
+                  '@timestamp':
+                    type: date
+                  id_schema:
+                    type: integer
+                  bucket:
+                    type: keyword
+                    fields:
+                      text:
+                        type: text
+                  error_code:
+                    type: keyword
+                  error_reason:
+                    type: text
+                    fields:
+                      keyword:
+                        type: keyword
+                        ignore_above: 256
+                  error_trace:
+                    type: text
+                    fields:
+                      keyword:
+                        type: keyword
+                        ignore_above: 256
+                  success_date:
+                    type: date
+                  object_key:
+                    type: text
+                    fields:
+                      keyword:
+                        type: keyword
+                        ignore_above: 256
+                  object_path:
+                    type: text
+                    fields:
+                      keyword:
+                        type: keyword
+                        ignore_above: 256
+                  partition_time:
+                    type: date
+                  partition_time_str:
+                    type: text
+                  process_time:
+                    type: date
+                  stat_delta_seconds:
+                    type: integer
+                  stat_file_count:
+                    type: integer
+                  stat_row_count:
+                    type: long
+                  stat_total_size:
+                    type: long
+                  stat_type:
+                    type: keyword
+                  status:
+                    type: keyword
+                  tag_id:
+                    type: text
+                    fields:
+                      keyword:
+                        type: keyword
+                        ignore_above: 256
       timeout_override:
       continue_if_exception: False
       disable_action: False
