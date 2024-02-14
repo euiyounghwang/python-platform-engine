@@ -1,10 +1,10 @@
 ### Prometheus
 
-Prometheus (<i>https://prometheus.io/download/, https://yoo11052.tistory.com/201</i>) is an open-source monitoring system that collects metrics from your application and stores them in a time series database. It can be used to monitor the performance of your application and alert you when something goes wrong
+__Prometheus__ (<i>https://prometheus.io/download/, https://yoo11052.tistory.com/201</i>) is an open-source monitoring system that collects metrics from your application and stores them in a time series database. It can be used to monitor the performance of your application and alert you when something goes wrong
 
-- Elasticserach Exporter : This is a builtin exporter from Elasticsearch to Prometheus. It collects all relevant metrics and makes them available to Prometheus via the Elasticsearch REST API. (https://github.com/vvanholl/elasticsearch-prometheus-exporter/, https://blog.naver.com/PostView.naver?blogId=whddbsml&logNo=222405287424)
-- Python Exporter (https://pypi.org/project/prometheus-flask-exporter/)
-- Node Exporter : The node_exporter is designed to monitor the host system. It's not recommended to deploy it as a Docker container because it requires access to the host system (https://github.com/prometheus/node_exporter/, https://github.com/prometheus/node_exporter/releases/download/v1.6.1/node_exporter-1.6.1.darwin-amd64.tar.gz)
+- __Elasticserach Exporter__ : This is a builtin exporter from Elasticsearch to Prometheus. It collects all relevant metrics and makes them available to Prometheus via the Elasticsearch REST API. (https://github.com/vvanholl/elasticsearch-prometheus-exporter/, https://blog.naver.com/PostView.naver?blogId=whddbsml&logNo=222405287424)
+- __Python Exporter__ (https://pypi.org/project/prometheus-flask-exporter/)
+- __Node Exporter__ : The node_exporter is designed to monitor the host system. It's not recommended to deploy it as a Docker container because it requires access to the host system (https://github.com/prometheus/node_exporter/, https://github.com/prometheus/node_exporter/releases/download/v1.6.1/node_exporter-1.6.1.darwin-amd64.tar.gz)
 
 ```bash
   # My local environment to install node-exporter Docker instance
@@ -21,7 +21,7 @@ Prometheus (<i>https://prometheus.io/download/, https://yoo11052.tistory.com/201
     - 9100:9100
 ```
 
-- RabbitMQ Exporter : Prometheus exporter for RabbitMQ metrics. Data is scraped by prometheus. You can install plugin promethus from RabbitMQ Plugin 
+- __RabbitMQ Exporter__ : Prometheus exporter for RabbitMQ metrics. Data is scraped by prometheus. You can install plugin promethus from RabbitMQ Plugin 
 ```bash
 # Install Plugin
 /opt/homebrew/opt/rabbitmq/sbin/rabbitmq-plugins enable rabbitmq_prometheus
