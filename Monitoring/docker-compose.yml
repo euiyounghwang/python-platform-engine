@@ -135,10 +135,10 @@ services:
       - 9091:9090
     volumes:
       # - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./prometheus:/prometheus
+      - ./Prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./Prometheus/:/prometheus
       # - ./alertmanager/alert.rules:/alertmanager/alert.rules
-      - ./alertmanager/alert_rules.yml:/alertmanager/alert_rules.yml
+      - ./Alertmanager/alert_rules.yml:/alertmanager/alert_rules.yml
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.path=/prometheus
@@ -157,8 +157,8 @@ services:
     container_name: alertmanager
     privileged: true
     volumes:
-      - ./alertmanager/alertmanager.yml:/alertmanager.yml
-      - ./alertmanager/slack.tmpl:/slack.tmpl
+      - ./Alertmanager/alertmanager.yml:/alertmanager.yml
+      - ./Alertmanager/slack.tmpl:/slack.tmpl
     command:
       - '--config.file=/alertmanager.yml'
       - "--web.external-url=http://localhost:9093"
