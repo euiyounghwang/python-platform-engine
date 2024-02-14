@@ -29,7 +29,7 @@ brew services restart rabbitmq
 ```
 
 - The Alertmanager(<i>http://localhost:9091/alerts?search, http://localhost:9093/#/alerts, http://localhost:9093/api/v2/alerts</i>) handles alerts sent by client applications such as the Prometheus server. Alerting with Prometheus is separated into two parts. Alerting rules in Prometheus servers send alerts to an Alertmanager. 
-```
+```bash
 # Alertmanager Configuration
 alerting:
   alertmanagers:
@@ -40,13 +40,15 @@ alerting:
 rule_files:
   - "/Alertmanager/alert.rules"
   
-  
+...  
 # Prometheus.yml
 - job_name: rabbitmq-exporter
   scrape_interval: 10s
   metrics_path: "/metrics"
   static_configs:
   - targets: ['host.docker.internal:15692']
+...
+
 ```
 
 Alert rules are defined in Prometheus configuration. Prometheus just scrapes (pull) metrics from its client application(the Node Exporter). However, if any alert condition hits, Prometheus pushes it to the AlertManager which manages the alerts through its pipeline of silencing, inhibition, grouping and sending out notifications.
