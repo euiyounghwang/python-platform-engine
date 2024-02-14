@@ -252,6 +252,51 @@ GET _cat/indices?v
 GET myindex-create-from-curator2/_settings
 GET myindex-create-from-curator2/_mapping
 
+
+#-----
+POST _reindex?wait_for_completion=false
+{
+  "conflicts": "proceed",
+  "source": {
+    "index": "omnisearch_v16"
+  },
+  "dest": {
+    "index": "omnisearch_v17",
+    "op_type": "create"
+  }
+}
+
+# Wed Mar 15 2023 11:24:52
+GET _tasks?detailed=true&actions=*reindex
+
+GET _tasks/BH_UUNP2RjafE0aNHGi_Hw:216731707
+POST _tasks/BH_UUNP2RjafE0aNHGi_Hw:216731707/_cancel
+
+#-----
+
+# aggs
+GET omnisearch_v16,omnisearch_v17/_search
+{
+  "size": 0,
+  "track_total_hits": true,
+  "aggs": {
+    "entity_type_aggs": {
+      "terms": {
+        "field": "global_headers.entity_type",
+        "size": 200
+      },
+      "aggs": {
+        "id": {
+          "terms": {
+            "field": "_id",
+            "size": 200
+          }
+        }
+      }
+    }
+  }
+}
+
 #-----
 
 DELETE my_index
@@ -309,3 +354,8 @@ GET my_index/_search
     }
   }
 }
+
+
+
+
+
