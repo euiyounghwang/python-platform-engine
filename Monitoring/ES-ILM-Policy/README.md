@@ -1,4 +1,4 @@
-### Elasticsearch ILM(Index Life-Cycle Management)
+# Elasticsearch ILM(Index Life-Cycle Management)
 
 <i>You can configure index lifecycle management (ILM) policies to automatically manage indices according to your performance, resiliency, and retention requirements. For example, you could use ILM to:
 - Spin up a new index when an index reaches a certain size or number of documents
