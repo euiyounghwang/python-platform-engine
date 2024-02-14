@@ -74,3 +74,238 @@ POST _snapshot/my_backup/backup_20240209/_restore
   "include_aliases": false
 }
 
+
+# ---
+
+# test
+PUT /_ilm/policy/omnisearch_highlight_policy
+{
+  "policy": {
+    "phases": {
+      "hot": {
+        "actions": {
+          "rollover": {
+            "max_size": "5GB",
+            "max_docs": 2,
+            "max_age": "15d"
+          }
+        }
+      },
+      "cold": {
+        "min_age": "0m",
+        "actions": {}
+      },
+      "delete": {
+        "min_age": "5m",
+        "actions": {
+          "delete": {
+            "delete_searchable_snapshot": true
+          }
+        }
+      }
+    }
+  }
+}
+
+GET _ilm/policy/
+
+GET _template
+
+DELETE omnisearch_highlight_v2-*
+
+DELETE _index_template/rolling
+
+# need to update the alias
+PUT _index_template/rolling
+{
+  "index_patterns": [
+    "omnisearch_highlight_v*"
+  ],
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0,
+      "index.lifecycle.name": "omnisearch_highlight_policy",
+      "index.lifecycle.rollover_alias": "rolling-write-index",
+      "analysis": {
+        "analyzer": {
+          "test_analyzer": {
+            "filter": [
+              "lowercase",
+              "stop",
+              "snowball"
+            ],
+            "char_filter": [
+              "test_char_filter"
+            ],
+            "tokenizer": "whitespace"
+          }
+        },
+        "char_filter": {
+          "test_char_filter": {
+            "type": "mapping",
+            "mappings": [
+              "+ => _plus_",
+              "- => _minus_"
+            ]
+          }
+        }
+      }
+    },
+    "mappings": {
+      "properties": {
+        "my_keyword_field": {
+          "type": "keyword"
+        }
+      }
+    }
+  }
+}
+
+
+# different index
+PUT _bulk
+{"index":{"_index":"test_set"}}
+{"my_keyword_field": "man"}
+
+
+GET _cat/indices
+
+
+POST _reindex?wait_for_completion=false
+{
+  "conflicts": "proceed",
+  "source": {
+    "index": "test_set",
+    "query": {
+      "bool": {
+        "must_not": [
+          {
+            "exists": {
+              "field": "query"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "dest": {
+    "index": "omnisearch_highlight_v2-000001",
+    "op_type": "create"
+  }
+}
+
+GET omnisearch_highlight_v2-000001
+GET omnisearch_highlight_v2-000001/_ilm/explain
+
+GET omnisearch_highlight_v2-*/_search
+{
+  "track_total_hits": true, 
+  "query": {
+    "match_all": {}
+  },
+  "size": 200
+}
+
+GET _cat/aliases
+
+
+# ilm alias
+POST _aliases
+{
+  "actions": [
+    {
+      "add": {
+        "index": "omnisearch_highlight_v2-000001",
+        "alias": "rolling-write-index"
+      }
+    }
+  ]
+}
+
+
+PUT _bulk
+{"index":{"_index":"rolling-write-index"}}
+{"my_keyword_field": "man"}
+
+
+POST _aliases
+{
+  "actions": [
+    {
+      "add": {
+        "index": "omnisearch_highlight_v2-000001",
+        "alias": "rolling-write-index",
+        "is_write_index" : true
+      }
+    }
+  ]
+}
+
+GET omnisearch_highlight_v2-000002
+GET omnisearch_highlight_v2-000002/_ilm/explain
+
+GET omnisearch_highlight_v2-000003
+
+GET _cat/indices?v
+
+GET myindex-create-from-curator2/_settings
+GET myindex-create-from-curator2/_mapping
+
+#-----
+
+DELETE my_index
+
+PUT my_index
+{
+  "mappings": {
+      "properties": {
+        "acl_join_field": { 
+          "type": "join",
+          "relations": {
+            "parent": "child" 
+          }
+        }
+    }
+  }
+}
+
+
+# parent index
+PUT _bulk
+{"index":{"_index":"my_index","_id":"1"}}
+{"text":"This is a question","acl_join_field":{"name":"parent"}}
+
+
+# child index
+PUT _bulk?routing=1&refresh
+{"index":{"_index":"my_index","_id":"3"}}
+{"text":"This is a child","authz":["1","2"], "acl_join_field":{"name":"child","parent":"1"}}
+
+
+GET my_index
+GET my_index/_search
+
+
+GET my_index/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "has_child": {
+            "type": "child",
+            "query": {
+              "terms": {
+                "authz": [
+                  "1",
+                  "100"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
