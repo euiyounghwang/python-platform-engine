@@ -6,3 +6,4 @@ Monitoring/Curator/.venv/
 Monitoring/Curator/debug.log
 Search-Engine/Docker/elasticsearch/backup/
 Fabric/.venv/
+Search-Engine/Docker/elasticsearch/.venv/
