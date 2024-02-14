@@ -39,15 +39,17 @@ alerting:
 # loading at once and evaluate the rule periodically based on 'evaluation_interval'
 rule_files:
   - "/Alertmanager/alert.rules"
-```
-
-![Alt text](/screenshot/AlertManager-Installation.png)
-
-- Prometheus.yml
-```bash
+  
+  
+# Prometheus.yml
 - job_name: rabbitmq-exporter
   scrape_interval: 10s
   metrics_path: "/metrics"
   static_configs:
   - targets: ['host.docker.internal:15692']
 ```
+
+Alert rules are defined in Prometheus configuration. Prometheus just scrapes (pull) metrics from its client application(the Node Exporter). However, if any alert condition hits, Prometheus pushes it to the AlertManager which manages the alerts through its pipeline of silencing, inhibition, grouping and sending out notifications.
+
+![Alt text](/screenshot/AlertManager-Installation.png)
+
