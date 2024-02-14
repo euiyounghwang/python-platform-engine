@@ -1,5 +1,5 @@
 
-### Elasticsearch Curator
+# Elasticsearch Curator
 
 <i>Elasticsearch Curator helps you curate, or manage, your Elasticsearch indices and snapshots by:
 - Obtaining the full list of indices (or snapshots) from the cluster, as the actionable list
