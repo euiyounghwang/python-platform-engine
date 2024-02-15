@@ -4,6 +4,11 @@ import pandas as pd
 from elasticsearch import Elasticsearch
 import argparse
 import os
+import warnings
+import logging
+
+warnings.filterwarnings("ignore")
+logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
 # logger = log.reate_log()
 MAX_BYTES = 1048576
@@ -14,7 +19,11 @@ def get_headers():
 
 def get_es_instance(_host):
     # create a new instance of the Elasticsearch client class
-    es_client = Elasticsearch(hosts=_host, headers=get_headers(), timeout=600)
+    # Elasticseach < 8.x basic auth example:
+    es_client = Elasticsearch(hosts=_host, headers=get_headers(), http_auth=('elastic','gsaadmin'), timeout=600)
+    
+    # Elasticsearch >= 8.x
+    # es_client = Elasticsearch(hosts=_host, headers=get_headers(), basic_auth=('elastic','gsaadmin'), timeout=600)
     return es_client
 
 def create_index(es_client, _index):
@@ -119,7 +128,7 @@ def load():
     from os.path import dirname
     df = (
         # pd.read_csv(dirname(__file__) + "/dataset/wiki_movie_plots_deduped.csv")
-        pd.read_csv(os.path.join(os.path.dirname(__file__), "../dataset/wiki_movie_plots_deduped.csv"))
+        pd.read_csv(os.path.join(os.path.dirname(__file__), "./dataset/wiki_movie_plots_deduped.csv"))
         .dropna()
         .sample(5000, random_state=42)
         .reset_index()
@@ -146,9 +155,10 @@ def search(es, _index):
     )
 
     # Show total counts from elasticsearch
-    print("Total counts for search - {}".format(json.dumps(response['hits']['total']['value'], indent=2)))
+    logging.info("Total counts for search - {}".format(json.dumps(response['hits']['total']['value'], indent=2)))
     # Show first rows from elasticsearch
-    print("response for search - {}".format(json.dumps(response['hits']['hits'][0], indent=2)))
+    # print("response for search - {}".format(json.dumps(response['hits']['hits'][0], indent=2)))
+    logging.info("response for search - {}".format(json.dumps(response['hits']['hits'], indent=2)))
 
 
 def sinngle_indexing_mode_run(es, _index):
@@ -195,22 +205,26 @@ def buffer_indexing_mode_run(es, _index):
 
         if Get_Buffer_Length(actions) > MAX_BYTES:
             response = es.bulk(body=actions)
-            print("** indexing ** : {}".format(json.dumps(response, indent=2)))
+            # --
+            # Elasticsearch >= 8, response.body
+            # It needs to install same version of es and use response.body when indexing otherwise response
+            logging.info("** indexing ** : {}".format(json.dumps(response.body, indent=2)))
             del actions[:]
 
     # --
     # Index for the remain Dataset
     # --
     response = es.bulk(body=actions)
-    print("** Remain Dataset indexing ** : {}".format(json.dumps(response, indent=2)))
+    logging.info("** indexing ** : {}".format(json.dumps(response.body, indent=2)))
 
 
 if __name__ == "__main__":
     '''
-    python tools/elasticsearch/bulk_index_script.py
+    (.venv) ➜  python-platform-engine git:(master) ✗ python ./Search-Engine/Docker/elasticsearch/bulk_index_script.py
+    (.venv) ➜  python-platform-engine git:(master) ✗ python ./Search-Engine/Docker/elasticsearch/bulk_index_script.py -e http://localhost:9209
     '''
     parser = argparse.ArgumentParser(description="Index into Elasticsearch using this script")
-    parser.add_argument('-e', '--es', dest='es', default="http://localhost:9221", help='host target')
+    parser.add_argument('-e', '--es', dest='es', default="http://localhost:9203", help='host target')
     args = parser.parse_args()
 
     if args.es:

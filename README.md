@@ -10,7 +10,7 @@
     - Elasticsearch Curator : `source ./source-curator-env.sh`, `./source-curator-create-index.sh` for creating sample indexes into ES for executing curator shell script to index, delete or take a snapshot
 
 - Search-Engine `./Search-Engine` : Install the numer of search-engine such as Elasticsearch, Opensearch, Solr based on `./Search-Engine/Docker-compose.yml`. 
-    - Script with build Docker : You can be create an instance of Elasticsearch node V.8 with `bulid_index_script.py` and `reindex script`.
+    - Script with build Docker : You can be create an instance of Elasticsearch node V.8(`./Search-Engine/Docker-compose.yml`) with `bulid_index_script.py` and `reindex script`. Also it can be accesed to the enviroment using `source ./source-elasticsearch-env.sh` for the scripts.
     
 - RabbitMQ (`./RabbitMQ`) : an open-source message-broker software (sometimes called message-oriented middleware) that originally implemented the Advanced Message Queuing Protocol (AMQP)
 
