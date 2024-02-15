@@ -6,8 +6,10 @@ from elasticsearch import helpers
 import argparse
 import datetime
 import warnings
+import logging
 
 warnings.filterwarnings('ignore')
+logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
 def get_headers():
     ''' Elasticsearch Header '''
@@ -78,8 +80,8 @@ def work_reindex_api(src_es, dest_es, src_idx, dest_idx):
                     # }
     )
     
-    print(json.dumps(query, indent=2))
-    print(json.dumps(response, indent=2))
+    logging.info(json.dumps(query, indent=2))
+    logging.info(json.dumps(response, indent=2))
     
 
 def work_scroll_api(src_es, dest_es, src_idx, dest_idx):
@@ -115,7 +117,7 @@ def work_scroll_api(src_es, dest_es, src_idx, dest_idx):
     # print(f'Current Size : {len(rs["hits"]["hits"])}')
     helpers.bulk(dest_es, transform(rs['hits']['hits']), chunk_size=batch_size)
     total_progressing += int(batch_size)
-    print(f'Ingest data .. : {str(total_progressing)}')
+    logging.info(f'Ingest data .. : {str(total_progressing)}')
     
     while True:
         # print(f'scroll : {rs["_scroll_id"]}')
@@ -124,7 +126,7 @@ def work_scroll_api(src_es, dest_es, src_idx, dest_idx):
         if len(rs['hits']['hits']) > 0:
             success, failed = helpers.bulk(dest_es, transform(rs['hits']['hits']), chunk_size=batch_size, raise_on_error=True)
             total_progressing += success
-            print(f'Ingest data .. : {str(total_progressing)}')
+            logging.info(f'Ingest data .. : {str(total_progressing)}')
         else:
             break;
      
@@ -139,21 +141,24 @@ def work_scroll_api(src_es, dest_es, src_idx, dest_idx):
     }'
     
     '''    
+    dest_es.indices.refresh(index=dest_idx)
     rs = dest_es.search(index=[dest_idx],
         body=body
     )
 
-    print('-'*10)
-    print(f'Validation Search Size : {rs["hits"]["total"]["value"]}')
-    print('-'*10)
+    logging.info('-'*10)
+    logging.info(f'Validation Search Size : {rs["hits"]["total"]["value"]}')
+    logging.info('-'*10)
 
 
 if __name__ == "__main__":
     '''
-    python tools/elasticsearch/reindex_script.py
-    python tools/elasticsearch/reindex_script.py --src_index=test_omnisearch_v2 --dest_index=cp_test_omnisearch_v2
-    python tools/elasticsearch/reindex_script.py --src_index=.monitoring-es-7-2023.12.15 --dest_index=.monitoring-es-7-2023.12.15
-    python tools/elasticsearch/reindex_script.py --type=reindex --src_index=test_omnisearch_v2 --dest_index=cp_test_omnisearch_v2
+    python ./Search-Engine/Docker/elasticsearch/reindex_script.py
+    (.venv) ➜  python-platform-engine git:(master) ✗ python ./Search-Engine/Docker/elasticsearch/reindex_script.py --src_index=performance_metrics --dest_index=cp_performance_metrics --type=scroll
+    (.venv) ➜  python-platform-engine git:(master) ✗ python ./Search-Engine/Docker/elasticsearch/reindex_script.py --src_index=performance_metrics --dest_index=cp_performance_metrics --type=reindex
+    python ./Search-Engine/Docker/elasticsearch/reindex_script.py --src_index=test_omnisearch_v2 --dest_index=cp_test_omnisearch_v2
+    python ./Search-Engine/Docker/elasticsearch/reindex_script.py --src_index=.monitoring-es-7-2023.12.15 --dest_index=.monitoring-es-7-2023.12.15
+    python ./Search-Engine/Docker/elasticsearch/reindex_script.py --type=reindex --src_index=test_omnisearch_v2 --dest_index=cp_test_omnisearch_v2
     '''
     parser = argparse.ArgumentParser(description="Reindex from old index to new index using _reindex_api")
     parser.add_argument('-t', '--type', dest='type', default="scroll", help='scroll,reindex')
