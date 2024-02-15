@@ -193,17 +193,26 @@ def buffer_indexing_mode_run(es, _index):
 
         if Get_Buffer_Length(actions) > MAX_BYTES:
             response = es.bulk(body=actions)
+            # Elasticsearch >= 8, response.body
+            # It needs to install same version of es and use response.body when indexing otherwise response
             print("** indexing ** : {}".format(json.dumps(response, indent=2)))
             del actions[:]
 
     # --
     # Index for the remain Dataset
+    # Elasticsearch >= 8, response.body
+    # It needs to install same version of es and use response.body when indexing otherwise response
     # --
     response = es.bulk(body=actions)
     print("** Remain Dataset indexing ** : {}".format(json.dumps(response, indent=2)))
 
 
 if __name__ == "__main__":
+    
+    '''
+    (.venv) ➜  python-platform-engine git:(master) ✗ python ./Search-Engine/Docker/elasticsearch/Search-indexing-script.py
+    (.venv) ➜  python-platform-engine git:(master) ✗ python ./Search-Engine/Docker/elasticsearch/Search-indexing-script.py -e http://localhost:9209
+    '''
     parser = argparse.ArgumentParser(description="Index into Elasticsearch using this script")
     parser.add_argument('-e', '--es', dest='es', default="http://localhost:9209", help='host target')
     args = parser.parse_args()
