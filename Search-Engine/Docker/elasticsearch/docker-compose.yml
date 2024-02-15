@@ -3,6 +3,8 @@ version: '3'
 name: platform-repository
 services:
   
+  # default docker instance to run
+  # docker run --rm -p 9200:9200 -p 9300:9300 -e "xpack.security.enabled=false" -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:8.8.0
   fn-platform-basic-omni_es:
     image: fn-platform-basic-api:omni_es
     container_name: fn-platform-basic-omni_es
