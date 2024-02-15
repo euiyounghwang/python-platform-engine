@@ -9,7 +9,7 @@
 - Monitoring (`./Monitoring`, https://github.com/euiyounghwang/python-search_engine) : `Grafana`(a multi-platform open source analytics and interactive visualization web application. It provides charts, graphs, and alerts for the web when connected to supported data sources), `Prometheus, Cerebro, AlertManager, Elasticsearch Curator/ILM Policy, Python Export_Script`. Before execute the command as the following, you need to create virtualenv via create_virtual_env.sh like  `source ./Monitoring/Curator/create_virtual_env.sh` (https://github.com/euiyounghwang/python-platform-engine/blob/master/Monitoring/Curator/create_virtual_env.sh) in each tool
     - Elasticsearch Curator : `source ./source-curator-env.sh`, `./source-curator-create-index.sh` for creating sample indexes into ES for executing curator shell script to index, delete or take a snapshot
 
-- Search-Engine `./Search-Engine` : Install the numer of search-engine such as Elasticsearch, Opensearch, Solr based on `./Search-Engine/Docker-compose.yml`. 
+- Search-Engine (`./Search-Engine`) : Install the numer of search-engine such as Elasticsearch, Opensearch, Solr based on `./Search-Engine/Docker-compose.yml`. 
     - Script with build Docker : You can be create an instance of Elasticsearch node V.8(`./Search-Engine/Docker-compose.yml`) with `bulid_index_script.py` and `reindex script`. Also it can be accesed to the enviroment using `source ./source-elasticsearch-env.sh` for the scripts.
     
 - RabbitMQ (`./RabbitMQ`) : an open-source message-broker software (sometimes called message-oriented middleware) that originally implemented the Advanced Message Queuing Protocol (AMQP)
