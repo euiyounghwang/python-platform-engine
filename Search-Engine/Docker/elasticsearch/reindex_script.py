@@ -8,7 +8,8 @@ import datetime
 import warnings
 import logging
 
-warnings.filterwarnings('ignore')
+warnings.filterwarnings('ignore', category=DeprecationWarning)
+
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
 def get_headers():
@@ -24,64 +25,68 @@ def get_es_instance(_host):
 def work_reindex_api(src_es, dest_es, src_idx, dest_idx):
     ''' processing using _reindex api '''
     
-    print(f'src_es - {src_es}')
-    # scroll_time='60s'
-    scroll_time='1m'
-    batch_size='1000'
-    
-    ''' 
-    It's not working and you can see the following error message if your es cluster is higher than the current cluster and you ar using _reindex_api
-    TransportError(500, 'exception', 'Error parsing the response, remote is likely not an Elasticsearch instance')
-    '''
-    '''
-    query = {
-        "conflicts": "proceed",
-        "source": {
-            "remote": {
-                "host": "http://host.docker.internal:9209",
-                "username": "elastic",
-                "password": "gsaadmin"
+    try:
+        print(f'src_es - {src_es}')
+        # scroll_time='60s'
+        scroll_time='1m'
+        batch_size='1000'
+        
+        ''' 
+        It's not working and you can see the following error message if your es cluster is higher than the current cluster and you ar using _reindex_api
+        TransportError(500, 'exception', 'Error parsing the response, remote is likely not an Elasticsearch instance')
+        '''
+        '''
+        query = {
+            "conflicts": "proceed",
+            "source": {
+                "remote": {
+                    "host": "http://host.docker.internal:9209",
+                    "username": "elastic",
+                    "password": "gsaadmin"
+                },
+                "index": src_idx,
+                "query": {
+                    "match_all": {}
+                }
             },
-            "index": src_idx,
-            "query": {
-                "match_all": {}
+            "dest": {
+                "index": dest_idx,
+                "op_type" : "create"
             }
-        },
-        "dest": {
-            "index": dest_idx,
-            "op_type" : "create"
         }
-    }
-    
-    response = dest_es.reindex(
-        query,
-        wait_for_completion=True, 
-        request_timeout=300
-    )
-    '''
-    
-    query = {
-        "track_total_hits" : True,
-        "query": { 
-            "match_all" : {}
+        
+        response = dest_es.reindex(
+            query,
+            wait_for_completion=True, 
+            request_timeout=300
+        )
+        '''
+        
+        query = {
+            "track_total_hits" : True,
+            "query": { 
+                "match_all" : {}
+            }
         }
-    }
-    response = helpers.reindex(
-                    client=src_es, 
-                    target_client=dest_es,
-                    source_index=src_idx, 
-                    target_index=dest_idx, 
-                    query=query,
-                    chunk_size=int(batch_size), 
-                    # op_type='_index',
-                    scroll=scroll_time, 
-                    # bulk_kwargs={
-                    #     'wait_for_completion': True
-                    # }
-    )
-    
-    logging.info(json.dumps(query, indent=2))
-    logging.info(json.dumps(response, indent=2))
+        response = helpers.reindex(
+                        client=src_es, 
+                        target_client=dest_es,
+                        source_index=src_idx, 
+                        target_index=dest_idx, 
+                        query=query,
+                        chunk_size=int(batch_size), 
+                        op_type='create',
+                        scroll=scroll_time, 
+                        # bulk_kwargs={
+                        #     'wait_for_completion': True
+                        # }
+        )
+        
+        logging.info(json.dumps(query, indent=2))
+        logging.info(json.dumps(response, indent=2))
+        
+    except Exception as e:
+        logging.error(e)
     
 
 def work_scroll_api(src_es, dest_es, src_idx, dest_idx):
@@ -93,7 +98,7 @@ def work_scroll_api(src_es, dest_es, src_idx, dest_idx):
     
     # scroll_time='60s'
     scroll_time='1m'
-    batch_size='1000'
+    batch_size='1'
     total_progressing = 0
     
     body = {
@@ -115,6 +120,7 @@ def work_scroll_api(src_es, dest_es, src_idx, dest_idx):
     )
 
     # print(f'Current Size : {len(rs["hits"]["hits"])}')
+    print(rs['hits']['hits'])
     helpers.bulk(dest_es, transform(rs['hits']['hits']), chunk_size=batch_size)
     total_progressing += int(batch_size)
     logging.info(f'Ingest data .. : {str(total_progressing)}')
@@ -124,6 +130,7 @@ def work_scroll_api(src_es, dest_es, src_idx, dest_idx):
         scroll_id = rs['_scroll_id']
         rs = src_es.scroll(scroll_id=scroll_id, scroll=scroll_time)
         if len(rs['hits']['hits']) > 0:
+            print(rs['hits']['hits'])
             success, failed = helpers.bulk(dest_es, transform(rs['hits']['hits']), chunk_size=batch_size, raise_on_error=True)
             total_progressing += success
             logging.info(f'Ingest data .. : {str(total_progressing)}')
@@ -155,6 +162,7 @@ if __name__ == "__main__":
     '''
     python ./Search-Engine/Docker/elasticsearch/reindex_script.py
     (.venv) ➜  python-platform-engine git:(master) ✗ python ./Search-Engine/Docker/elasticsearch/reindex_script.py --src_index=performance_metrics --dest_index=cp_performance_metrics --type=scroll
+    (.venv) ➜  python-platform-engine git:(master) ✗ python ./Search-Engine/Docker/elasticsearch/reindex_script.py --src_index=.monitoring-es-7-2024.02.09 --dest_index=cp_.ds-metricbeat-8.8.0-2023.09.21 --type=reindex
     (.venv) ➜  python-platform-engine git:(master) ✗ python ./Search-Engine/Docker/elasticsearch/reindex_script.py --src_index=performance_metrics --dest_index=cp_performance_metrics --type=reindex
     python ./Search-Engine/Docker/elasticsearch/reindex_script.py --src_index=test_omnisearch_v2 --dest_index=cp_test_omnisearch_v2
     python ./Search-Engine/Docker/elasticsearch/reindex_script.py --src_index=.monitoring-es-7-2023.12.15 --dest_index=.monitoring-es-7-2023.12.15
@@ -187,8 +195,8 @@ if __name__ == "__main__":
             
         StartTime, EndTime, Delay_Time = 0, 0, 0
 
-        print(f'source es : {src_host}, dest es : {des_host}')
-        print(f'source index : {src_index}, dest index : {des_index}')
+        logging.info(f'source es : {src_host}, dest es : {des_host}')
+        logging.info(f'source index : {src_index}, dest index : {des_index}')
         # exit()
         
         # --
@@ -203,12 +211,13 @@ if __name__ == "__main__":
             work_scroll_api(src_es_host, des_es_host, src_index, des_index)
         elif reindex_type == 'reindex':
             work_reindex_api(src_es_host, des_es_host, src_index, des_index)
+    
+    except Exception as e:
+        logging.error(e)
+        
+    finally:
         # --
         EndTime = datetime.datetime.now()
     
-    except Exception as e:
-        print(e)
-        
-    finally:
         Delay_Time = str((EndTime - StartTime).seconds) + '.' + str((EndTime - StartTime).microseconds).zfill(6)[:2]
-        print(f'Running Time : {Delay_Time}s')
+        logging.info(f'Running Time : {Delay_Time}s')
