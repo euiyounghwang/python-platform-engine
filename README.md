@@ -11,7 +11,7 @@
 
 - Search-Engine (`./Search-Engine`) : Install the number of search-engines such as Elasticsearch, Opensearch, Solr based on `./Search-Engine/Docker-compose.yml`. 
     - Script with build Docker : You can be create an instance of Elasticsearch node V.8(`./Search-Engine/Docker-compose.yml`) with `bulid_index_script.py` and `reindex script`. Also it can be accesed to the enviroment using `source ./source-es-env.sh` for the scripts.
-    - Script for reindexing or others : `./source-es-reindex-run.sh` to run reindexing script
+    - Script for reindexing or others : `./source-es-reindex-run.sh` to run reindexing script, `./source-es-indexing-run.sh`to run test/db script
     ```bash 
     (.venv) ➜  python-platform-engine git:(master) ✗ ./source-es-reindex-run.sh
     VirtualEnv exists.
