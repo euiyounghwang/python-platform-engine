@@ -5,13 +5,16 @@ import os
 from datetime import datetime
 import pandas as pd
 import re
+import logging
 
+
+logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
 class Search():
     ''' elasticsearch class '''
     
     def __init__(self, host):
-        self.timeout = 60
+        self.timeout = 600
         self.MAX_BYTES = 1048576
         
         # self.es_client = Elasticsearch(hosts=host, headers=self.get_headers(), timeout=self.timeout)
@@ -21,6 +24,10 @@ class Search():
         
         # Elasticsearch >= 8.x
         # self.es_client = Elasticsearch(hosts=_host, headers=self.get_headers(), basic_auth=('elastic','gsaadmin'), timeout=self.timeout)
+    
+    
+    def get_es_instance(self):
+        return self.es_client
     
     
     def close(self):
@@ -73,10 +80,10 @@ class Search():
                     print('Successfully deleted: {}'.format(index))
                     self.es_client.indices.delete(index)
                     # now create a new index
-                    self.es_client.indices.create(index=_index, body=mapping)
+                    self.es_client.indices.create(index=index, body=mapping)
                     # es_client.indices.put_alias(index, "omnisearch_search")
-                    self.es_client.indices.refresh(index=_index)
-                    print("Successfully created: {}".format(_index))
+                    self.es_client.indices.refresh(index=index)
+                    print("Successfully created: {}".format(index))
             
             except NotFoundError:
                 pass
@@ -118,11 +125,54 @@ class Search():
             to_replace = re.sub(r'_id', '', 'key')
         
         return to_replace
+    
+    
+    def buffered_json_to_es(self, raw_json, _index):
+        '''
+        raw_json : 
+        # [{'_index': 'recommendation_test', '_id': 'cLOXEosBDeViDjrDAL8Z', '_score': 1.0, '_source': {'intern': 'Richard', 'grade': 'bad', 'type': 'grade'}},
+        ...]
+        '''
+        logging.info("buffered_json_to_es Loading..")
         
+        try:
+            actions = []
+            for each_raw in raw_json:
+                # print(each_raw)
+                actions.append({'index': {'_index': _index}})
+                actions.append(each_raw['_source'])
+                # print(json.dumps(actions, indent=2))
+                
+                if self.Get_Buffer_Length(actions) > self.MAX_BYTES:
+                    response = self.es_client.bulk(body=actions)
+                    if response['errors'] == 'true':
+                        logging.error(response)
+                    else:
+                        logging.info("** indexing ** : {}".format(len(response['items'])))
+                    del actions[:]
+                
+            # --
+            # Index for the remain Dataset
+            # --
+            response = self.es_client.bulk(body=actions)
+            
+            if response['errors'] == 'true':
+                logging.error(response)
+            else:
+                logging.info("** remain indexing ** : {}".format(len(response['items'])))
+            
+            # --
+            # refresh
+            self.es_client.indices.refresh(index=_index)
+            
+          
+        except Exception as e:
+            print('buffered_json_to_es exception : {}'.format(str(e)))
+                
 
-    def buffered_json_to_es(self, df, _index):
+    def buffered_df_to_es(self, df, _index):
         ''' df : Dataframe format, _index: Elasticsearch index name that you want to save '''
-        print("buffered_json_to_es Loading..")
+        print("buffered_df_to_es Loading..")
         ''' Nan to black for each field value '''
         
         try:
@@ -131,15 +181,17 @@ class Search():
         
             # creating a list of dataframe columns 
             columns = list(df) 
-            print(columns)
+            # print(columns)
             for row in list(df.values.tolist()):
                 rows_dict = {}
                 for i, colmun_name in enumerate(columns):
                     rows_dict.update({self.transform_json_clean_characters(colmun_name) : self.transform_json_clean_characters(row[i])})
+                
                 # print(rows_dict)
                 actions.append({'index': {'_index': _index}})
                 actions.append(rows_dict)
                 # print(json.dumps(actions, indent=2))
+                
                 if self.Get_Buffer_Length(actions) > self.MAX_BYTES:
                     response = self.es_client.bulk(body=actions)
                     print("** indexing Error - True/False ** : {}".format(json.dumps(response['errors'], indent=2)))
@@ -157,4 +209,4 @@ class Search():
             self.es_client.indices.refresh(index=_index)
         
         except Exception as e:
-            print('buffered_json_to_es exception : {}'.format(str(e)))
+            print('buffered_df_to_es exception : {}'.format(str(e)))
