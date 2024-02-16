@@ -10,7 +10,27 @@
     - Elasticsearch Curator : `source ./source-curator-env.sh`, `./source-curator-create-index.sh` for creating sample indexes into ES for executing curator shell script to index, delete or take a snapshot
 
 - Search-Engine (`./Search-Engine`) : Install the number of search-engines such as Elasticsearch, Opensearch, Solr based on `./Search-Engine/Docker-compose.yml`. 
-    - Script with build Docker : You can be create an instance of Elasticsearch node V.8(`./Search-Engine/Docker-compose.yml`) with `bulid_index_script.py` and `reindex script`. Also it can be accesed to the enviroment using `source ./source-elasticsearch-env.sh` for the scripts.
+    - Script with build Docker : You can be create an instance of Elasticsearch node V.8(`./Search-Engine/Docker-compose.yml`) with `bulid_index_script.py` and `reindex script`. Also it can be accesed to the enviroment using `source ./source-es-env.sh` for the scripts.
+    - Script for reindexing or others : `./source-es-reindex-run.sh` to run reindexing script
+    ```bash 
+    (.venv) ➜  python-platform-engine git:(master) ✗ ./source-es-reindex-run.sh
+    VirtualEnv exists.
+    ...
+    2024-02-15 19:21:51,437 : INFO : ('http://localhost:9209', 'http://localhost:9203', '.monitoring-es-7-2024.02.16', 'cp_recommendation_test')
+    2024-02-15 19:21:51,769 : INFO : POST http://localhost:9209/.monitoring-es-7-2024.02.16/_search?scroll=1m&size=1000 [status:200 request:0.330s]
+    2024-02-15 19:21:51,816 : INFO : Ingest data .. : 1000
+    <Elasticsearch([{'host': 'localhost', 'port': 9203}])>
+    2024-02-15 19:21:51,833 : INFO : HEAD http://localhost:9203/cp_recommendation_test [status:200 request:0.017s]
+    Successfully deleted: cp_recommendation_test
+    2024-02-15 19:21:52,018 : INFO : DELETE http://localhost:9203/cp_recommendation_test [status:200 request:0.183s]
+    2024-02-15 19:21:52,192 : INFO : PUT http://localhost:9203/cp_recommendation_test [status:200 request:0.174s]
+    2024-02-15 19:21:52,204 : INFO : POST http://localhost:9203/cp_recommendation_test/_refresh [status:200 request:0.011s]
+    Successfully created: cp_recommendation_test
+    2024-02-15 19:21:52,204 : INFO : buffered_json_to_es Loading..
+    2024-02-15 19:21:53,967 : INFO : POST http://localhost:9203/_bulk [status:200 request:0.372s]
+    2024-02-15 19:21:53,968 : INFO : ** indexing ** : 269
+    ...
+    ```
     
 - RabbitMQ (`./RabbitMQ`) : an open-source message-broker software (sometimes called message-oriented middleware) that originally implemented the Advanced Message Queuing Protocol (AMQP)
 
