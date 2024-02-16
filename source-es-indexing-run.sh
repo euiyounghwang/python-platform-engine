@@ -11,7 +11,7 @@ if [ -d $SCRIPTDIR//Search-Engine/Docker/elasticsearch/$VENV ]; then
     echo "VirtualEnv exists."
     # --
     # source ./source-elasticsearch-env.sh
-    source $SCRIPTDIR/Search-Engine/Docker/elasticsearch/.venv/bin/activate
+    source $SCRIPTDIR/Search-Engine/Docker/elasticsearch/$VENV/bin/activate
 else
     echo "VirtualEnv doesn't exists."
     source $SCRIPTDIR/Search-Engine/Docker/elasticsearch/create_virtual_env.sh
