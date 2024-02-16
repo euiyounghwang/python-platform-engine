@@ -85,14 +85,14 @@ def work(es_source_client, es_target_client, src_idx, dest_idx):
     }'
     
     '''    
-    # dest_es.indices.refresh(index=dest_idx)
-    # rs = dest_es.search(index=[dest_idx],
-    #     body=body
-    # )
+    es_t_client.indices.refresh(index=dest_idx)
+    rs = es_t_client.search(index=[dest_idx],
+        body=body
+    )
 
-    # logging.info('-'*10)
-    # logging.info(f'Validation Search Size : {rs["hits"]["total"]["value"]}')
-    # logging.info('-'*10)
+    logging.info('-'*10)
+    logging.info(f'Validation Search Size : {rs["hits"]["total"]["value"]}')
+    logging.info('-'*10)
 
 
 if __name__ == "__main__":
