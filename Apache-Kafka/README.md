@@ -16,7 +16,6 @@ source .venv/bin/activate
 Or
 
 ➜  Apache-Kafka git:(master) ✗ source ./create_virtual_env.sh 
-➜  Apache-Kafka git:(master) ✗ source ./create_virtual_env.sh 
 Directory exists.
 Created virtual enviroment >> + /Users/euiyoung.hwang/ES/Python_Workspace/python-platform-engine/Apache-Kafka/.venv/bin/activate
 Install requirements.txt
