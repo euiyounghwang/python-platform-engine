@@ -19,7 +19,7 @@ fi
 
 # --
 # default script for reindexing
-# python $SCRIPTDIR//Search-Engine/Docker/elasticsearch/Search-reindexing-script.py
+python $SCRIPTDIR//Search-Engine/Docker/elasticsearch/Search-reindexing-script.py
 
 # target es index script for reindexing
-python ./Search-Engine/Docker/elasticsearch/Search-reindexing-script.py --source_index .monitoring-es-7-2024.02.16
+# python ./Search-Engine/Docker/elasticsearch/Search-reindexing-script.py --source_index .monitoring-es-7-2024.02.16
