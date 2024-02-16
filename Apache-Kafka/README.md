@@ -3,7 +3,9 @@
 - URl : <i>https://github.com/euiyounghwang/python-search_engine/tree/master/kafka</i>
 
 
-Apache Kafka is an open-source distributed event streaming platform used by thousands of companies for high-performance data pipelines, streaming analytics, data integration, and mission-critical applications. A Kafka consumer is any application or process that processes data from Kafka topics (Collection of Messages). Consumers subscribe to topics, and Kafka ensures that each message within a topic is delivered to all subscribed consumers in a scalable and parallel manner. a Kafka consumer can listen to (and subscribe to) more than one topic. This capability is one of Kafka’s strengths.
+Apache Kafka is an open-source distributed event streaming platform used by thousands of companies for high-performance data pipelines, streaming analytics, data integration, and mission-critical applications. 
+
+A Kafka consumer is any application or process that processes data from Kafka topics (Collection of Messages). Consumers subscribe to topics, and Kafka ensures that each message within a topic is delivered to all subscribed consumers in a scalable and parallel manner. a Kafka consumer can listen to (and subscribe to) more than one topic. This capability is one of Kafka’s strengths.
 
 
 #### Using Python Virtual Environment
