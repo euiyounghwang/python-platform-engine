@@ -95,7 +95,7 @@ def work(es_host, es_index_name):
                     print({k : v})
             We can make the same way using Dataframe after convert df to json
             '''
-            es_client.buffered_json_to_es(df=pd.DataFrame.from_dict(rows), _index=es_index_name)
+            es_client.buffered_df_to_es(df=pd.DataFrame.from_dict(rows), _index=es_index_name)
                    
     except Exception as e:
         print("Connection - {}".format(str(e)))
