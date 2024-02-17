@@ -197,6 +197,7 @@ POST _reindex?wait_for_completion=false
 
 
 # - reindex.remote.whitelist="192.168.68.1:*,host.docker.internal:*,localhost:*"
+# The new cluster doesn’t have to start fully-scaled out. As you migrate indices and shift the load to the new cluster, you can add nodes to the new cluster and remove nodes from the old one.Create an index with the appropriate mappings and settings. Set the refresh_interval to -1 and set number_of_replicas to 0 for faster reindexing.
 POST _reindex?wait_for_completion=true
 {
   "source": {
