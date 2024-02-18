@@ -24,6 +24,7 @@ services:
       # - http.cors.allow-credentials=true
       # - xpack.security.enabled=false
       # - bootstrap.system_call_filter=false
+      # - reindex.remote.whitelist=${NODE_WHITE_LIST}
       # - ES_JAVA_OPTS=-Xms1g -Xmx1g
       
       # v_8
@@ -40,6 +41,7 @@ services:
       - xpack.license.self_generated.type=basic
       - action.destructive_requires_name=false
       - http.port=9201
+      - reindex.remote.whitelist=${NODE_WHITE_LIST}
     volumes:
       - data:/usr/share/elasticsearch/data
       # - ./Docker/elasticsearch/backup:/usr/share/elasticsearch/backup
