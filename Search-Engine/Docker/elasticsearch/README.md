@@ -174,6 +174,16 @@ GET my_index/_search
 ```bash 
 # - reindex.remote.whitelist="192.168.68.1:*,host.docker.internal:*,localhost:*"
 
+# "refresh_interval" : "1s"
+PUT test-000001/_settings
+{
+  "index" : {
+    "number_of_replicas" : 0,
+    "refresh_interval" : -1
+  }
+}
+
+
 POST _reindex?wait_for_completion=false
 {
   "conflicts": "proceed",
@@ -220,6 +230,90 @@ GET _cat/indices
 GET _tasks?detailed=true&actions=*reindex
 
 GET _tasks/BH_UUNP2RjafE0aNHGi_Hw:216731707
+```
+
+### Configuration
+```bash 
+
+#--
+# configuration
+# default 1 second
+PUT my_index
+{
+  "settings": {
+    "refresh_interval": "30s"
+  }
+}
+
+# search_analyzer, analyzer
+# normalizer : Elasticsearch normalizers are a crucial component in the text analysis process, specifically when dealing with keyword fields
+PUT blogs
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "engram_a": {
+          "tokenizer": "standard",
+          "filter": [ "lowercase", "engram_f" ]
+        }
+      },
+      "filter": {
+        "engram_f": {
+          "type": "edge_ngram",
+          "min_gram": 2,
+          "max_gram": 5
+        }
+      },
+      "normalizer": {
+        "norm_low": {
+          "type": "custom",
+          "filter": [ "lowercase", "asciifolding" ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "title": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "normalizer": "norm_low"
+          }
+        }
+      },
+      "author": {
+        "type": "text",
+        "analyzer": "engram_a",
+        "search_analyzer": "standard",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
+      },
+      "synopsis": {
+        "type": "text",
+        "fielddata": true
+      },
+      "category": {
+        "type": "keyword"
+      },
+      "content": {
+        "type": "text",
+        "index": false
+      }
+    }
+  }
+}
+
+POST blogs/_analyze
+{
+  "normalizer": "norm_low",
+  "text": "2 Quick Foxes."
+}
 ```
 
 
@@ -563,5 +657,411 @@ GET my_index3/_analyze
   "text": [
     "The quick brown fox jumps over the lazy dog"
   ]
+}
+
+
+# character filter
+POST _analyze
+{
+  "tokenizer": "keyword",
+  "char_filter": [
+    "html_strip"
+  ],
+  "text": "<p>I&apos;m so <b>happy</b>!</p>"
+}
+
+PUT coding
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "coding_analyzer": {
+          "char_filter": [
+            "cpp_char_filter"
+          ],
+          "tokenizer": "whitespace",
+          "filter": [ "lowercase", "stop", "snowball" ]
+        }
+      },
+      "char_filter": {
+        "cpp_char_filter": {
+          "type": "mapping",
+          "mappings": [ "+ => _plus_", "- => _minus_" ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "language": {
+        "type": "text",
+        "analyzer": "coding_analyzer"
+      }
+    }
+  }
+}
+
+POST coding/_bulk
+{"index":{"_id":"1"}}
+{"language":"Java"}
+{"index":{"_id":"2"}}
+{"language":"C"}
+{"index":{"_id":"3"}}
+{"language":"C++"}
+
+GET coding/_termvectors/3?fields=language
+
+GET coding/_search
+{
+  "query": {
+    "match": {
+      "language": "C++"
+    }
+  }
+}
+
+
+# tokenizer
+GET _analyze
+{
+  "tokenizer": "standard",
+  "text": "THE quick.brown_FOx jumped! @ 3.5 meters."
+}
+
+GET _analyze
+{
+  "tokenizer": "standard",
+  "text": "email address is my-name@email.com and website is https://www.elastic.co"
+}
+
+# token filter
+GET _analyze
+{
+  "filter": [ "lowercase" ],
+  "text": [ "Harry Potter and the Philosopher's Stone" ]
+}
+
+# add stop filter
+PUT my_stop
+{
+  "settings": {
+    "analysis": {
+      "filter": {
+        "my_stop_filter": {
+          "type": "stop",
+          "stopwords_path": "user_dic/my_stop_dic.txt"
+        }
+      }
+    }
+  }
+}
+
+GET my_stop/_analyze
+{
+  "tokenizer": "whitespace",
+  "filter": [
+    "lowercase",
+    "my_stop_filter"
+  ],
+  "text": [ "Around the World in Eighty Days" ]
+}
+
+GET _analyze
+{
+  "tokenizer": "standard",
+  "filter": [
+    "lowercase",
+    "unique"
+  ],
+  "text": [
+    "white fox, white rabbit, white bear"
+  ]
+}
+```
+
+
+### nGram/Edge
+```bash 
+
+DELETE my_ngram
+
+PUT my_ngram
+{
+  "settings": {
+    "analysis": {
+      "filter": {
+        "my_ngram_f": {
+          "type": "ngram",
+          "min_gram": 2,
+          "max_gram": 3
+        }
+      }
+    }
+  }
+}
+
+GET my_ngram/_analyze
+{
+  "tokenizer": "keyword",
+  "filter": [
+    "my_ngram_f"
+  ],
+  "text": "house"
+}
+
+PUT my_shingle
+{
+  "settings": {
+    "analysis": {
+      "filter": {
+        "my_shingle_f": {
+          "type": "shingle",
+          "min_shingle_size": 3,
+          "max_shingle_size": 4
+        }
+      }
+    }
+  }
+}
+
+GET my_shingle/_analyze
+{
+  "tokenizer": "whitespace",
+  "filter": [
+    "my_shingle_f"
+  ],
+  "text": "this is my sweet home"
+}
+
+PUT my-index-000001
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "my_analyzer": {
+          "tokenizer": "my_tokenizer"
+        }
+      },
+      "tokenizer": {
+        "my_tokenizer": {
+          "type": "edge_ngram",
+          "min_gram": 2,
+          "max_gram": 10,
+          "token_chars": [
+            "letter",
+            "digit"
+          ]
+        }
+      }
+    }
+  }
+}
+
+POST my-index-000001/_analyze
+{
+  "analyzer": "my_analyzer",
+  "text": "2 Quick Foxes."
+}
+```
+
+### Aggregations
+
+```bash 
+# -- 
+# aggregation
+
+GET my_stations
+
+PUT my_stations/_bulk
+{"index": {"_id": "1"}}
+{"date": "2019-06-01", "line": "1호선", "station": "종각", "passangers": 2314}
+{"index": {"_id": "2"}}
+{"date": "2019-06-01", "line": "2호선", "station": "강남", "passangers": 5412}
+{"index": {"_id": "3"}}
+{"date": "2019-07-10", "line": "2호선", "station": "강남", "passangers": 6221}
+{"index": {"_id": "4"}}
+{"date": "2019-07-15", "line": "2호선", "station": "강남", "passangers": 6478}
+{"index": {"_id": "5"}}
+{"date": "2019-08-07", "line": "2호선", "station": "강남", "passangers": 5821}
+{"index": {"_id": "6"}}
+{"date": "2019-08-18", "line": "2호선", "station": "강남", "passangers": 5724}
+{"index": {"_id": "7"}}
+{"date": "2019-09-02", "line": "2호선", "station": "신촌", "passangers": 3912}
+{"index": {"_id": "8"}}
+{"date": "2019-09-11", "line": "3호선", "station": "양재", "passangers": 4121}
+{"index": {"_id": "9"}}
+{"date": "2019-09-20", "line": "3호선", "station": "홍제", "passangers": 1021}
+{"index": {"_id": "10"}}
+{"date": "2019-10-01", "line": "3호선", "station": "불광", "passangers": 971}
+
+
+GET my_stations/_search
+{
+  "size": 0,
+  "aggs": {
+    "all_passangers": {
+      "sum": {
+        "field": "passangers"
+      }
+    }
+  }
+}
+
+GET my_stations/_search
+{
+  "query": {
+    "match": {
+      "station": "불광"
+    }
+  },
+  "size": 0,
+  "aggs": {
+    "gangnam_passangers": {
+      "sum": {
+        "field": "passangers"
+      }
+    }
+  }
+}
+
+
+GET my_stations/_search
+{
+  "size": 0, 
+  "aggs": {
+    "passangers_stats": {
+      "stats": {
+        "field": "passangers"
+      }
+    }
+  }
+}
+
+GET my_stations/_search
+{
+  "size": 0,
+  "aggs": {
+    "uniq_lines": {
+      "cardinality": {
+        "field": "line.keyword"
+      }
+    }
+  }
+}
+
+GET my_stations/_search
+{
+  "size": 0,
+  "aggs": {
+    "pass_percentiles": {
+      "percentiles": {
+        "field": "passangers",
+        "percents": [ 20, 60, 80 ]
+      }
+    }
+  }
+}
+
+
+GET my_stations/_search
+{
+  "size": 0,
+  "aggs": {
+    "passangers_range": {
+      "range": {
+        "field": "passangers",
+        "ranges": [
+          {
+            "to": 1000
+          },
+          {
+            "from": 1000,
+            "to": 4000
+          },
+          {
+            "from": 4000
+          }
+        ]
+      }
+    }
+  }
+}
+
+
+GET my_stations/_search
+{
+  "size": 0,
+  "aggs": {
+    "passangers_his": {
+      "histogram": {
+        "field": "passangers",
+        "interval": 2000
+      }
+    }
+  }
+}
+
+GET my_stations/_search
+{
+  "size": 0,
+  "aggs": {
+    "date_his": {
+      "date_histogram": {
+        "field": "date",
+        "calendar_interval": "month"
+      }
+    }
+  }
+}
+
+GET my_stations/_search
+{
+  "size": 0,
+  "aggs": {
+    "stations": {
+      "terms": {
+        "field": "station.keyword"
+      }
+    }
+  }
+}
+
+GET my_stations/_search
+{
+  "size": 0,
+  "aggs": {
+    "stations": {
+      "terms": {
+        "field": "station.keyword"
+      },
+      "aggs": {
+        "avg_psg_per_st": {
+          "avg": {
+            "field": "passangers"
+          }
+        }
+      }
+    }
+  }
+}
+
+
+GET my_stations/_search
+{
+  "size": 0,
+  "aggs": {
+    "lines": {
+      "terms": {
+        "field": "line.keyword"
+      },
+      "aggs": {
+        "stations_per_lines": {
+          "terms": {
+            "field": "station.keyword"
+          }
+        }
+      }
+    }
+  }
 }
 ```
