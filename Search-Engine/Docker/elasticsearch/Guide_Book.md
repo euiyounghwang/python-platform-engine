@@ -463,3 +463,102 @@ GET my_index/_search
 }
 
 ```
+
+### Search-Profiler on Dev Console in Kibana
+![Alt text](../../../screenshot/Search-Profiler.png)
+
+
+### Analyze
+```bash 
+#--
+GET _analyze
+{
+  "text": "The quick brown fox jumps over the lazy dog",
+  "tokenizer": "whitespace",
+  "filter": [
+    "lowercase",
+    "stop",
+    "snowball"
+  ]
+}
+
+# same result with lowercase, stop token filter
+GET _analyze
+{
+  "text": "The quick brown fox jumps over the lazy dog",
+  "analyzer": "snowball"
+}
+
+GET my_index2
+
+PUT my_index2
+{
+  "mappings": {
+    "properties": {
+      "message": {
+        "type": "text",
+        "analyzer": "snowball"
+      }
+    }
+  }
+}
+
+PUT my_index2/_doc/1
+{
+  "message": "The quick brown fox jumps over the lazy dog"
+}
+
+
+GET my_index2/_search
+{
+  "query": {
+    "match": {
+      "message": "jumping"
+    }
+  }
+}
+
+# Cheeck termvectors
+GET my_index2/_termvectors/1?fields=message
+
+
+
+DELETE my_index3
+
+PUT my_index3
+{
+  "settings": {
+    "index": {
+      "analysis": {
+        "analyzer": {
+          "my_custom_analyzer": {
+            "type": "custom",
+            "tokenizer": "whitespace",
+            "filter": [
+              "lowercase",
+              "my_stop_filter",
+              "snowball"
+            ]
+          }
+        },
+        "filter": {
+          "my_stop_filter": {
+            "type": "stop",
+            "stopwords": [
+              "brown"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
+
+GET my_index3/_analyze
+{
+  "analyzer": "my_custom_analyzer",
+  "text": [
+    "The quick brown fox jumps over the lazy dog"
+  ]
+}
+```
