@@ -14,6 +14,22 @@ $ bin/elasticsearch -E cluster.name=my-cluster -E node.name="node-1"
 ### CRUD in Elasticsearch
 ```bash 
 #--- index, create, update, delete
+
+POST _bulk
+{"index":{"_index":"test", "_id":"1"}}
+{"field":"value one"}
+{"index":{"_index":"test", "_id":"2"}}
+{"field":"value two"}
+{"delete":{"_index":"test", "_id":"2"}}
+{"create":{"_index":"test", "_id":"3"}}
+{"field":"value three"}
+{"update":{"_index":"test", "_id":"1"}}
+{"doc":{"field":"value two"}}
+
+# Bulk json using file
+$ curl -XPOST "http://localhost:9200/_bulk" -H 'Content-Type: application/json' --data-binary @bulk.json
+
+
 POST _bulk
 { "index": { "_index": "my-index-b", "_id" : "1"} }
 { "field1": "value1" }
@@ -149,9 +165,11 @@ GET my_index/_search
 
 
 ### reindex in Elasticsearch
+- The new cluster doesn’t have to start fully-scaled out. As you migrate indices and shift the load to the new cluster, you can add nodes to the new cluster and remove nodes from the old one.
+- Create an index with the appropriate mappings and settings. Set the refresh_interval to -1 and set number_of_replicas to 0 for faster reindexing.
+
 ```bash 
 # - reindex.remote.whitelist="192.168.68.1:*,host.docker.internal:*,localhost:*"
-# The new cluster doesn’t have to start fully-scaled out. As you migrate indices and shift the load to the new cluster, you can add nodes to the new cluster and remove nodes from the old one.Create an index with the appropriate mappings and settings. Set the refresh_interval to -1 and set number_of_replicas to 0 for faster reindexing.
 
 POST _reindex?wait_for_completion=false
 {
@@ -203,6 +221,11 @@ GET _tasks/BH_UUNP2RjafE0aNHGi_Hw:216731707
 
 
 ### ILM in Elasticsearch
+- You can configure index lifecycle management (ILM) policies to automatically manage indices according to your performance, resiliency, and retention requirements
+- Spin up a new index when an index reaches a certain size or number of documents
+- Create a new index each day, week, or month and archive previous ones
+- Delete stale indices to enforce data retention standards
+
 ```bash 
 # test
 PUT /_ilm/policy/omnisearch_highlight_policy
@@ -377,6 +400,66 @@ POST _snapshot/my_backup/backup_20240209/_restore
   "rename_replacement": "$1_restored",
   "include_aliases": false
 }
+```
 
+
+### Search in Elasticsearch
+```bash 
+
+# --
+POST my_index/_bulk
+{"index":{"_id":1}}
+{"message":"The quick brown fox"}
+{"index":{"_id":2}}
+{"message":"The quick brown fox jumps over the lazy dog"}
+{"index":{"_id":3}}
+{"message":"The quick brown fox jumps over the quick dog"}
+{"index":{"_id":4}}
+{"message":"Brown fox brown dog"}
+{"index":{"_id":5}}
+{"message":"Lazy jumping dog"}
+
+
+GET my_index/_search
+{
+  "query": {
+    "match": {
+      "message": {
+        "query": "quick dog",
+        "operator": "and"
+      }
+    }
+  },
+  "highlight": {
+    "require_field_match": true,
+    "order": "score",
+    "pre_tags": [
+      "<b>"
+    ],
+    "post_tags": [
+      "</b>"
+    ],
+    "fields": {
+      "*": {
+        "number_of_fragments": 1,
+        "type": "plain",
+        "fragment_size": 150
+      }
+    }
+  }
+}
+
+
+GET my_index/_search
+{
+  "query": {
+    "match_phrase": {
+      "message": {
+        "query": "lazy dog",
+        "slop": 1
+      }
+    }
+  }
+}
 
 ```
