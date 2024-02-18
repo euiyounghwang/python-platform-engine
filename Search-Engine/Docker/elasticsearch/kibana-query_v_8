@@ -673,7 +673,6 @@ PUT my_index2/_doc/1
 }
 
 
-
 # Result Cnt : 1
 GET my_index2/_search
 {
@@ -748,6 +747,207 @@ GET my_index3/_analyze
   ]
 }
 
+# character filter
+POST _analyze
+{
+  "tokenizer": "keyword",
+  "char_filter": [
+    "html_strip"
+  ],
+  "text": "<p>I&apos;m so <b>happy</b>!</p>"
+}
 
+PUT coding
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "coding_analyzer": {
+          "char_filter": [
+            "cpp_char_filter"
+          ],
+          "tokenizer": "whitespace",
+          "filter": [ "lowercase", "stop", "snowball" ]
+        }
+      },
+      "char_filter": {
+        "cpp_char_filter": {
+          "type": "mapping",
+          "mappings": [ "+ => _plus_", "- => _minus_" ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "language": {
+        "type": "text",
+        "analyzer": "coding_analyzer"
+      }
+    }
+  }
+}
+
+POST coding/_bulk
+{"index":{"_id":"1"}}
+{"language":"Java"}
+{"index":{"_id":"2"}}
+{"language":"C"}
+{"index":{"_id":"3"}}
+{"language":"C++"}
+
+GET coding/_termvectors/3?fields=language
+
+GET coding/_search
+{
+  "query": {
+    "match": {
+      "language": "C++"
+    }
+  }
+}
+
+# tokenizer
+GET _analyze
+{
+  "tokenizer": "standard",
+  "text": "THE quick.brown_FOx jumped! @ 3.5 meters."
+}
+
+GET _analyze
+{
+  "tokenizer": "standard",
+  "text": "email address is my-name@email.com and website is https://www.elastic.co"
+}
+
+# token filter
+GET _analyze
+{
+  "filter": [ "lowercase" ],
+  "text": [ "Harry Potter and the Philosopher's Stone" ]
+}
+
+# add stop filter
+PUT my_stop
+{
+  "settings": {
+    "analysis": {
+      "filter": {
+        "my_stop_filter": {
+          "type": "stop",
+          "stopwords_path": "user_dic/my_stop_dic.txt"
+        }
+      }
+    }
+  }
+}
+
+GET my_stop/_analyze
+{
+  "tokenizer": "whitespace",
+  "filter": [
+    "lowercase",
+    "my_stop_filter"
+  ],
+  "text": [ "Around the World in Eighty Days" ]
+}
+
+GET _analyze
+{
+  "tokenizer": "standard",
+  "filter": [
+    "lowercase",
+    "unique"
+  ],
+  "text": [
+    "white fox, white rabbit, white bear"
+  ]
+}
+
+
+#--
+# ngram
+
+DELETE my_ngram
+
+PUT my_ngram
+{
+  "settings": {
+    "analysis": {
+      "filter": {
+        "my_ngram_f": {
+          "type": "ngram",
+          "min_gram": 2,
+          "max_gram": 3
+        }
+      }
+    }
+  }
+}
+
+GET my_ngram/_analyze
+{
+  "tokenizer": "keyword",
+  "filter": [
+    "my_ngram_f"
+  ],
+  "text": "house"
+}
+
+PUT my_shingle
+{
+  "settings": {
+    "analysis": {
+      "filter": {
+        "my_shingle_f": {
+          "type": "shingle",
+          "min_shingle_size": 3,
+          "max_shingle_size": 4
+        }
+      }
+    }
+  }
+}
+
+GET my_shingle/_analyze
+{
+  "tokenizer": "whitespace",
+  "filter": [
+    "my_shingle_f"
+  ],
+  "text": "this is my sweet home"
+}
+
+PUT my-index-000001
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "my_analyzer": {
+          "tokenizer": "my_tokenizer"
+        }
+      },
+      "tokenizer": {
+        "my_tokenizer": {
+          "type": "edge_ngram",
+          "min_gram": 2,
+          "max_gram": 10,
+          "token_chars": [
+            "letter",
+            "digit"
+          ]
+        }
+      }
+    }
+  }
+}
+
+POST my-index-000001/_analyze
+{
+  "analyzer": "my_analyzer",
+  "text": "2 Quick Foxes."
+}
+
+#--
 
 
