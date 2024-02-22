@@ -56,6 +56,8 @@ DELETE test_index1_restored
 
 GET _cat/indices
 
+GET test_index1_restored
+
 GET test_index1_restored/_search
 {
   "query": {
@@ -63,6 +65,46 @@ GET test_index1_restored/_search
   }
 }
 
+# Point in time for deep pagination
+# use the search_after parameter with a point in time (PIT).
+# In your reponse, you need to look at the last hit and take the sort value from that last hit
+# Then in your next search call, you'll specify that value in search_after
+# "search_after": [ "100000012", "98" ],  
+POST test_index1_restored/_pit?keep_alive=1m
+
+POST /_search
+{
+  "sort": [
+    {
+      "date": {
+        "order": "desc"
+      }
+    }
+  ], 
+  "size": 100,
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "terms": {
+            "tags": [
+              "elasticsearch"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "pit": {
+    "id": "45XtAwEUdGVzdF9pbmRleDFfcmVzdG9yZWQWbVlFWlNTMTZUdUtkWjhkc0t2WWt6QQAWekdqYzZ4QXFTU2V4MktHMzlyVDFfZwAAAAAAAABgHxZZVzF3VUlnUlJDUzkwNHZzSWg5TVR3AAEWbVlFWlNTMTZUdUtkWjhkc0t2WWt6QQAA",
+    "keep_alive": "1m"
+  }
+}
+
+DELETE /_pit
+{
+    "id" : "46ToAwMDaWR5BXV1aWQyKwZub2RlXzMAAAAAAAAAACoBYwADaWR4BXV1aWQxAgZub2RlXzEAAAAAAAAAAAEBYQADaWR5BXV1aWQyKgZub2RlXzIAAAAAAAAAAAwBYgACBXV1aWQyAAAFdXVpZDEAAQltYXRjaF9hbGw_gAAAAA=="
+}
 
 POST _snapshot/my_backup/backup_20240209/_restore
 {
@@ -237,9 +279,9 @@ GET cp99_performance_metrics/_settings
 # "refresh_interval" : "1s"
 PUT cp99_performance_metrics/_settings
 {
-  "index" : {
-	"number_of_replicas" : 0,
-  "refresh_interval" : "-1"
+  "index": {
+    "number_of_replicas": 0,
+    "refresh_interval": "-1"
   }
 }
 
