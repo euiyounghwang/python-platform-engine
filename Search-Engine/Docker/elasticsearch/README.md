@@ -1065,3 +1065,50 @@ GET my_stations/_search
   }
 }
 ```
+
+
+
+### Point in Time
+
+```json 
+# Point in time for deep pagination
+# use the search_after parameter with a point in time (PIT).
+# In your reponse, you need to look at the last hit and take the sort value from that last hit
+# Then in your next search call, you'll specify that value in search_after
+# "search_after": [ "100000012", "98" ],  
+POST test_index1_restored/_pit?keep_alive=1m
+
+POST /_search
+{
+  "sort": [
+    {
+      "date": {
+        "order": "desc"
+      }
+    }
+  ], 
+  "size": 100,
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "terms": {
+            "tags": [
+              "elasticsearch"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "pit": {
+    "id": "45XtAwEUdGVzdF9pbmRleDFfcmVzdG9yZWQWbVlFWlNTMTZUdUtkWjhkc0t2WWt6QQAWekdqYzZ4QXFTU2V4MktHMzlyVDFfZwAAAAAAAABgHxZZVzF3VUlnUlJDUzkwNHZzSWg5TVR3AAEWbVlFWlNTMTZUdUtkWjhkc0t2WWt6QQAA",
+    "keep_alive": "1m"
+  }
+}
+
+DELETE /_pit
+{
+    "id" : "46ToAwMDaWR5BXV1aWQyKwZub2RlXzMAAAAAAAAAACoBYwADaWR4BXV1aWQxAgZub2RlXzEAAAAAAAAAAAEBYQADaWR5BXV1aWQyKgZub2RlXzIAAAAAAAAAAAwBYgACBXV1aWQyAAAFdXVpZDEAAQltYXRjaF9hbGw_gAAAAA=="
+}
+```
