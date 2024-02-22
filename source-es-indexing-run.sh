@@ -20,7 +20,7 @@ fi
 
 # --
 # default script for test indexing
-python $SCRIPTDIR//Search-Engine/Docker/elasticsearch/Search-indexing-script.py
+python $SCRIPTDIR/Search-Engine/Docker/elasticsearch/Search-indexing-script.py
 
 # default script for db indexing
 # python $SCRIPTDIR//Search-Engine/Docker/elasticsearch/Search-indexing-db-script.py
