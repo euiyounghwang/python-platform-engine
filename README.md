@@ -36,6 +36,8 @@
     
 - RabbitMQ (`./RabbitMQ`) : an open-source message-broker software (sometimes called message-oriented middleware) that originally implemented the Advanced Message Queuing Protocol (AMQP)
 
+- Apache Hadoop (`./Apache-Hadoop`) : The Apache Hadoop software library is a framework that allows for the distributed processing of large data sets across clusters of computers using simple programming models. 
+
 
 #### Example for Crontab
 - All Linux distributions are equipped with the cron utility, which allows users to schedule jobs to run at certain fixed times.
