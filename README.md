@@ -37,7 +37,7 @@
 - RabbitMQ (`./RabbitMQ`) : an open-source message-broker software (sometimes called message-oriented middleware) that originally implemented the Advanced Message Queuing Protocol (AMQP)
 
 - Apache Hadoop (`./Apache-Hadoop`) : The Apache Hadoop software library is a framework that allows for the distributed processing of large data sets across clusters of computers using simple programming models. 
-
+    - Build Docker in local environment : `./Apache-Hadoop/docker-compose.yml` to run resource manager, nodemanager, namenode, and datanode
 
 
 #### Example for Crontab

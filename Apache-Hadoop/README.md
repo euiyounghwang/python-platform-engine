@@ -24,6 +24,11 @@ $ hdfs COMMAND [-option <arg>]
 ```
 
 Create a basic docker-compose.yaml file like:
+- Build Docker in local environment : `./Apache-Hadoop/docker-compose.yml` to run resource manager, nodemanager, namenode, and datanode
+    - ResourceManager (RM) : Responsible for tracking the resources in a cluster, and scheduling applications (e.g., MapReduce jobs)
+    - NodeManager : Responsible for launching and managing containers on a node. Containers execute tasks as specified by the AppMaster. The NodeManager runs services to determine the health of the node it is executing on. The services perform checks on the disk as well as any user specified tests. If any health check fails, the NodeManager marks the node as unhealthy and communicates this to the ResourceManager, which then stops assigning containers to the node
+    - Namenode : the master node in the Apache Hadoop HDFS Architecture that maintains and manages the blocks present on the DataNodes (slave nodes)
+    - Datanode : Responsible for serving read and write requests from the file system’s clients. The DataNodes also perform block creation, deletion, and replication upon instruction from the NameNode.
 
 ```bash
 
