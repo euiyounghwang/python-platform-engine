@@ -102,9 +102,7 @@ CAPACITY-SCHEDULER.XML_yarn.scheduler.capacity.node-locality-delay=40
 CAPACITY-SCHEDULER.XML_yarn.scheduler.capacity.queue-mappings=
 CAPACITY-SCHEDULER.XML_yarn.scheduler.capacity.queue-mappings-override.enable=false
 
-
-http://localhost:9088/cluster/cluster
-http://localhost:9870/dfshealth.html#tab-overview
-
 ```
 
+### Hadoop URL in local env based on Docker
+- URL :  <i>http://localhost:9088/cluster/cluster, http://localhost:9870</i>
