@@ -11,12 +11,16 @@ services:
         - 9870:9870
       env_file:
         - ./config
+      networks:
+        - bridge
       environment:
           ENSURE_NAMENODE_DIR: "/tmp/hadoop-root/dfs/name"
   
   datanode:
       image: apache/hadoop:3
       command: ["hdfs", "datanode"]
+      networks:
+        - bridge
       env_file:
         - ./config      
   
@@ -26,6 +30,8 @@ services:
       command: ["yarn", "resourcemanager"]
       ports:
          - 9088:8088
+      networks:
+        - bridge
       env_file:
         - ./config
       volumes:
@@ -34,6 +40,8 @@ services:
   nodemanager:
       image: apache/hadoop:3
       command: ["yarn", "nodemanager"]
+      networks:
+        - bridge
       env_file:
         - ./config
       
