@@ -36,7 +36,7 @@
     
 - RabbitMQ (`./RabbitMQ`) : an open-source message-broker software (sometimes called message-oriented middleware) that originally implemented the Advanced Message Queuing Protocol (AMQP)
 
-- Apache Hadoop (`./Apache-Hadoop`) : The Apache Hadoop software library is a framework that allows for the distributed processing of large data sets across clusters of computers using simple programming models. 
+- Apache Hadoop (`./Apache-Hadoop`) : The Apache Hadoop software library is core big data framework to store and process Big Data. The storage component of Hadoop is called Hadoop Distributed File system (usually abbreviated HDFS) and the processing component of Hadoop is called MapReduce. Next, there are several daemons that will run inside a Hadoop cluster, which include NameNode, DataNode, etc.
     - Build docker in local environment : `./Apache-Hadoop/docker-compose.yml` to run resource manager, nodemanager, namenode, and datanode. Docker Compose allows us to run multi-container Docker applications and use multiple commands using only a YAML file. This will start the four necessary containers (if it is the first time you’re doing this, you’ll have to wait until the download finish)
 
 
