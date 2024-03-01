@@ -41,6 +41,22 @@
     - Build docker in local environment : `./Apache-Hadoop/docker-compose.yml` to run resource manager, nodemanager, namenode, and datanode. Docker Compose allows us to run multi-container Docker applications and use multiple commands using only a YAML file. This will start the four necessary containers (if it is the first time you’re doing this, you’ll have to wait until the download finish)
 
 
+
+### SSH Generation
+```bash
+https://blog.naver.com/PostView.nhn?blogId=special9486&logNo=220289095822
+ssh-keygen -t rsa
+eval $(ssh-agent -s)
+ssh-add ~/.ssh/id_rsa
+ 
+ssh-copy-id -i ./id_rsa.pub devuser@192.168.64.2
+-- GitHub
+pbcopy < ~/.ssh/id_rsa.pub 
+OR 
+cat ~/.ssh/id_rsa.pub
+```
+
+
 #### Example for Crontab
 - All Linux distributions are equipped with the cron utility, which allows users to schedule jobs to run at certain fixed times.
 - The system-wide root cron jobs are located in the /etc/crontab file. The file contents can be displayed using any text editor, or utilities like cat and more. sudo is not required to display the system cron jobs.
