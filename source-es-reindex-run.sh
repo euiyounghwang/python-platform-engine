@@ -7,7 +7,7 @@ SCRIPTDIR="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
 VENV=".venv"
 
-if [ -d $SCRIPTDIR//Search-Engine/Docker/elasticsearch/$VENV ]; then
+if [ -d $SCRIPTDIR/Search-Engine/Docker/elasticsearch/$VENV ]; then
     echo "VirtualEnv exists."
     # --
     # source ./source-elasticsearch-env.sh
@@ -16,6 +16,8 @@ else
     echo "VirtualEnv doesn't exists."
     source $SCRIPTDIR/Search-Engine/Docker/elasticsearch/create_virtual_env.sh
 fi
+
+echo "Validating virtualenv.."
 
 # --
 # default script for reindexing
