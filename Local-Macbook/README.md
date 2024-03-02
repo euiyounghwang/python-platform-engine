@@ -1,7 +1,7 @@
 
 # Local Environment on Mac
 
-- Install local tools
+- <i>Install local tools
 ```bash
 # homebrew
 brew -v 
