@@ -26,3 +26,43 @@
           - /var/run/docker.sock:/var/run/docker.sock
           - /usr/local/bin/docker:/usr/local/bin/docker
     ```
+    - Jenkins Pipleline Script Sample (`Installed Plugin for Pipleline`) : New Item with Pipleline - Add sample code into script
+    ```bash
+      pipeline {
+      agent any
+      stages {
+          stage('build') {
+              steps {
+                  echo 'building the application...'
+              }
+          }
+          stage('test') {
+              steps {
+                  echo 'testing the application...'
+              }
+          }
+          stage('deploy') {
+              steps {
+                  echo 'deploying the application...'
+              }
+          }
+      }
+    }
+    
+    ...
+    Console Output
+    
+    Started by user EUIYOUNG HWANG
+    [Pipeline] Start of Pipeline
+    [Pipeline] node
+    Running on Jenkins in /Users/euiyoung.hwang/.jenkins/workspace/CI-CD-Pileline-Sample
+    [Pipeline] {
+    [Pipeline] stage
+    [Pipeline] { (build)
+    [Pipeline] echo
+    building the application...
+    [Pipeline] }
+    [Pipeline] // stage
+    [Pipeline] stage
+    ...
+    ```
