@@ -1,5 +1,6 @@
 
-## Local Environment on Mac
+# Local Environment on Mac
+
 ```bash
 # homebrew
 brew -v 
