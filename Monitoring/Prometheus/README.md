@@ -55,3 +55,10 @@ Alert rules are defined in Prometheus configuration. Prometheus just scrapes (pu
 
 ![Alt text](/screenshot/AlertManager-Installation.png)
 
+
+- Grafana
+```bash
+# grafana reset password for docker
+# run this command within Docker
+grafana-cli admin reset-admin-password <new password>
+```
