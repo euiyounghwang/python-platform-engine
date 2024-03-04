@@ -12,4 +12,35 @@
     ```bash
     minikube start
     ```
+    - Interact with your cluster
+    If you already have kubectl installed (see documentation), you can now use it to access your shiny new cluster:
+    ```bash
+    kubectl get po -A
+    ```
+    Alternatively, minikube can download the appropriate version of kubectl and you should be able to use it like this:
+    ```bash 
+    minikube kubectl -- get po -A
+    ```
+    You can also make your life easier by adding the following to your shell config: (for more details see: kubectl)
+    ```bash 
+    alias kubectl="minikube kubectl --"
+    ```
+    - Deploy applications : Create a sample deployment and expose it on port 8080:
+    ```bash 
+    kubectl create deployment hello-minikube --image=kicbase/echo-server:1.0
+    kubectl expose deployment hello-minikube --type=NodePort --port=8080
+    ```
+    It may take a moment, but your deployment will soon show up when you run:
+    ```bash 
+    kubectl get services hello-minikube
+    ```
+    The easiest way to access this service is to let minikube launch a web browser for you:
+    ```bash 
+    minikube service hello-minikube
+    ```
+    Alternatively, use kubectl to forward the port:
+    ```bash 
+    kubectl port-forward service/hello-minikube 7080:8080
+    ```
+    
 
