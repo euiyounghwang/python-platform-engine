@@ -3,7 +3,7 @@
 
 - <i>__Minikube__ : `minikube` is local Kubernetes, focusing on making it easy to learn and develop for Kubernetes. All you need is Docker (or similarly compatible) container or a Virtual Machine environment, and Kubernetes is a single command away: `minikube start` (<i>https://minikube.sigs.k8s.io/docs/start/</i>)
 
-    - To install the latest minikube stable release on x86-64 macOS using binary download:
+    - __To install the latest minikube stable release on x86-64 macOS using binary download__:
     ```bash
     curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64
     sudo install minikube-darwin-amd64 /usr/local/bin/minikube
@@ -12,7 +12,7 @@
     ```bash
     minikube start
     ```
-    - Interact with your cluster
+    - __Interact with your cluster__
     ```bash
     If you already have kubectl installed (see documentation), you can now use it to access your shiny new cluster:
     kubectl get po -A
@@ -23,7 +23,7 @@
     You can also make your life easier by adding the following to your shell config: (for more details see: kubectl)
     alias kubectl="minikube kubectl --"
     ```
-    - Deploy applications : Create a sample deployment and expose it on port 8080:
+    - __Deploy applications__ : Create a sample deployment and expose it on port 8080:
     ```bash 
     kubectl create deployment hello-minikube --image=kicbase/echo-server:1.0
     kubectl expose deployment hello-minikube --type=NodePort --port=8080
