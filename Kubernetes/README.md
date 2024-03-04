@@ -23,7 +23,7 @@
     You can also make your life easier by adding the following to your shell config: (for more details see: kubectl)
     alias kubectl="minikube kubectl --"
     ```
-    - __Deploy applications__ : Create a sample deployment and expose it on port 8080:
+    - __Deploy applications : Create a sample deployment and expose it on port 8080 __
     ```bash 
     kubectl create deployment hello-minikube --image=kicbase/echo-server:1.0
     kubectl expose deployment hello-minikube --type=NodePort --port=8080
