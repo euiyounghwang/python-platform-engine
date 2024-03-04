@@ -36,6 +36,8 @@
     
     Alternatively, use kubectl to forward the port:
     kubectl port-forward service/hello-minikube 7080:8080
+    
+    Tada! Your application is now available at http://localhost:7080/.
     ```
     
 
