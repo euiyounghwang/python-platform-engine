@@ -1,18 +1,25 @@
 # Platform-Repository
 <i>Platform-Repository : Build local environment with a Docker and some scripts for testing (<i>git remote set-url origin git@github.com:euiyounghwang/python-platform-engine.git</i>)
 
-- Ansible (`./Ansible`) : Open-source automation platform that allows you to define and manage infrastructure as code. It provides modules and playbooks for installing, configuring, and managing Elasticsearch clusters.
-- Fabric (`./Fabric`, https://github.com/euiyounghwang/python-DevOps) : a high level Python (2.7, 3.4+) library designed to execute shell commands remotely over SSH, yielding useful Python objects in return. 
-- Docker (`./Dockerfile`) : Docker is one of the most popular container engines used in the software industry to create, package and deploy applications. I have added a sample Dockerfile to build an instance of Elasticsearch V.8 with `./Dockerfile/docker-compose.yml`
-- CI-CD (`./CI-CD`): Continuous Integration and Continuous Delivery (CI/CD) Platform that allows you to automate your build, test, and deployment pipeline such as CircleCI, Github Actions (GHA), and Jenkins via Github Webhooks
-- Apache Kafka (`./Apache-Kafka`) : Indexing through Logstash from Kafka Broker : Kafka Producer/Consumer (https://github.com/euiyounghwang/python-search_engine/blob/master/kafka/READMD.md), Kafka-Logstash-Elasticsearch using Python Virtual Enviroment. It can be build & install a enviroment using this script `source ./create_virtual_env.sh`
+- __Ansible__ (`./Ansible`) : Open-source automation platform that allows you to define and manage infrastructure as code. It provides modules and playbooks for installing, configuring, and managing Elasticsearch clusters.
+
+- __Fabric__ (`./Fabric`, https://github.com/euiyounghwang/python-DevOps) : a high level Python (2.7, 3.4+) library designed to execute shell commands remotely over SSH, yielding useful Python objects in return. 
+
+- __Docker__ (`./Dockerfile`) : Docker is one of the most popular container engines used in the software industry to create, package and deploy applications. I have added a sample Dockerfile to build an instance of Elasticsearch V.8 with `./Dockerfile/docker-compose.yml`
+
+- __CI-CD__ (`./CI-CD`): Continuous Integration and Continuous Delivery (CI/CD) Platform that allows you to automate your build, test, and deployment pipeline such as CircleCI, Github Actions (GHA), and Jenkins via Github Webhooks
+
+- __Apache Kafka__ (`./Apache-Kafka`) : Indexing through Logstash from Kafka Broker : Kafka Producer/Consumer (https://github.com/euiyounghwang/python-search_engine/blob/master/kafka/READMD.md), Kafka-Logstash-Elasticsearch using Python Virtual Enviroment. It can be build & install a enviroment using this script `source ./create_virtual_env.sh`
     - Script for producer/consumers: `./source-kafka-create-run.sh` script to create messages in several topics, `./source-kafka-consumer.sh` script to receive messages from the topics.
-- Minikube (`./kubernetes`): minikube is local Kubernetes, focusing on making it easy to learn and develop for Kubernetes. It can be installed and tested/deployed your docker into local minikube enviroment.
-- Logstash (`./Logstash`): Logstash is part of the Elastic Stack along with Beats, Elasticsearch and Kibana. Logstash (`./Logstash/logstash-run.sh`) is a server-side data processing pipeline that ingests data from a multitude of sources simultaneously. It can be handle with a amount of log messages from Restful API to elasticsearch through this logstash configuration.
-- Monitoring (`./Monitoring`, https://github.com/euiyounghwang/python-search_engine) : `Grafana`(a multi-platform open source analytics and interactive visualization web application. It provides charts, graphs, and alerts for the web when connected to supported data sources), `Prometheus, Cerebro, AlertManager, Elasticsearch Curator/ILM Policy, Python Export_Script`. Before execute the command as the following, you need to create virtualenv via create_virtual_env.sh like  `source ./Monitoring/Curator/create_virtual_env.sh` (https://github.com/euiyounghwang/python-platform-engine/blob/master/Monitoring/Curator/create_virtual_env.sh) in each tool
+    
+- __Minikube__ (`./kubernetes`): minikube is local Kubernetes, focusing on making it easy to learn and develop for Kubernetes. It can be installed and tested/deployed your docker into local minikube enviroment.
+
+- __Logstash__ (`./Logstash`): Logstash is part of the Elastic Stack along with Beats, Elasticsearch and Kibana. Logstash (`./Logstash/logstash-run.sh`) is a server-side data processing pipeline that ingests data from a multitude of sources simultaneously. It can be handle with a amount of log messages from Restful API to elasticsearch through this logstash configuration.
+
+- __Monitoring__ (`./Monitoring`, https://github.com/euiyounghwang/python-search_engine) : `Grafana`(a multi-platform open source analytics and interactive visualization web application. It provides charts, graphs, and alerts for the web when connected to supported data sources), `Prometheus, Cerebro, AlertManager, Elasticsearch Curator/ILM Policy, Python Export_Script`. Before execute the command as the following, you need to create virtualenv via create_virtual_env.sh like  `source ./Monitoring/Curator/create_virtual_env.sh` (https://github.com/euiyounghwang/python-platform-engine/blob/master/Monitoring/Curator/create_virtual_env.sh) in each tool
     - Elasticsearch Curator : `source ./source-curator-env.sh`, `./source-curator-create-index.sh` for creating sample indexes into ES for executing curator shell script to index, delete or take a snapshot
 
-- Search-Engine (`./Search-Engine`) : Install the number of search-engines such as Elasticsearch, Opensearch, Solr based on `./Search-Engine/Docker-compose.yml`. 
+- __Search-Engine__ (`./Search-Engine`) : Install the number of search-engines such as Elasticsearch, Opensearch, Solr based on `./Search-Engine/Docker-compose.yml`. 
     - Script with build Docker : You can be create an instance of Elasticsearch node V.8(`./Search-Engine/Docker-compose.yml`) with `bulid_index_script.py` and `reindex script`. Also it can be accesed to the enviroment using `source ./source-es-env.sh` for the scripts.
     - Script for reindexing or others : `./source-es-reindex-run.sh` to run reindexing script, `./source-es-indexing-run.sh`to run test/db script
     ```bash 
@@ -35,9 +42,9 @@
     ...
     ```
     
-- RabbitMQ (`./RabbitMQ`) : an open-source message-broker software (sometimes called message-oriented middleware) that originally implemented the Advanced Message Queuing Protocol (AMQP)
+- __RabbitMQ__ (`./RabbitMQ`) : an open-source message-broker software (sometimes called message-oriented middleware) that originally implemented the Advanced Message Queuing Protocol (AMQP)
 
-- Apache Hadoop (`./Apache-Hadoop`) : The Apache Hadoop software library is core big data framework to store and process Big Data. The storage component of Hadoop is called Hadoop Distributed File system (usually abbreviated HDFS) and the processing component of Hadoop is called MapReduce. Next, there are several daemons that will run inside a Hadoop cluster, which include NameNode, DataNode, etc.
+- __Apache Hadoop__ (`./Apache-Hadoop`) : The Apache Hadoop software library is core big data framework to store and process Big Data. The storage component of Hadoop is called Hadoop Distributed File system (usually abbreviated HDFS) and the processing component of Hadoop is called MapReduce. Next, there are several daemons that will run inside a Hadoop cluster, which include NameNode, DataNode, etc.
     - Build docker in local environment : `./Apache-Hadoop/docker-compose.yml` to run resource manager, nodemanager, namenode, and datanode. Docker Compose allows us to run multi-container Docker applications and use multiple commands using only a YAML file. This will start the four necessary containers (if it is the first time you’re doing this, you’ll have to wait until the download finish)
 
 
