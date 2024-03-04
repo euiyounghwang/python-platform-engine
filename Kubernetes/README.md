@@ -13,10 +13,10 @@
     minikube start
     ```
     - Interact with your cluster
-    If you already have kubectl installed (see documentation), you can now use it to access your shiny new cluster:
-    ```bash
-    kubectl get po -A
-    ```
+        If you already have kubectl installed (see documentation), you can now use it to access your shiny new cluster:
+        ```bash
+        kubectl get po -A
+        ```
     Alternatively, minikube can download the appropriate version of kubectl and you should be able to use it like this:
     ```bash 
     minikube kubectl -- get po -A
