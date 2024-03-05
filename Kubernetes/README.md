@@ -71,5 +71,7 @@
     Handling connection for 27777
     Handling connection for 27777
     ```
+    - Minikube dashboard:
+    ![Alt text](../screenshot/minikube-dashboard.png)
     
 
