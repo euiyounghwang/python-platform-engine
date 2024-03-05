@@ -71,7 +71,7 @@
     Handling connection for 27777
     Handling connection for 27777
     ```
-- Minikube dashboard:
+- __Minikube dashboard : Access the Kubernetes dashboard running within the minikube cluster__
 ![Alt text](../screenshot/minikube-dashboard.png)
     
 
