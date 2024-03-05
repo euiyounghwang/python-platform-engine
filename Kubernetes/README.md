@@ -43,4 +43,33 @@
     Tada! Your application is now available at http://localhost:7080/.
     ```
     
+     - __Install local docker to minikube__:
+    ```bash
+    
+    (.venv) ➜  python-fastapi-basic git:(master) eval $(minikube docker-env)                                                                      
+    Host added: /Users/euiyoung.hwang/.ssh/known_hosts ([127.0.0.1]:52981)
+    
+    (.venv) ➜  python-fastapi-basic git:(master) docker build -t fn-fastapi-basic-api:es .
+    
+    (.venv) ➜  python-fastapi-basic git:(master) docker images                            
+    REPOSITORY                                TAG       IMAGE ID       CREATED         SIZE
+    fn-fastapi-basic-api                      es        5436923ba41f   3 seconds ago   1.04GB
+    euiyoung/fn-flask-api                     es        4636df9868ab   6 months ago    1.08GB
+    
+    (.venv) ➜  python-fastapi-basic git:(master) kubectl create deployment fastapi-basic --image=fn-fastapi-basic-api:es
+    error: failed to create deployment: deployments.apps "fastapi-basic" already exists
+    
+    (.venv) ➜  python-fastapi-basic git:(master) kubectl get pods
+    NAME                             READY   STATUS    RESTARTS   AGE
+    fastapi-basic-846bf55898-kx48n   1/1     Running   0          7m23s
+    
+    (.venv) ➜  python-fastapi-basic git:(master) kubectl expose deployment fastapi-basic --type=NodePort --port=7777
+    
+    (.venv) ➜  python-fastapi-basic git:(master) kubectl port-forward fastapi-basic-846bf55898-kx48n 27777:7777                 
+    Forwarding from 127.0.0.1:27777 -> 7777
+    Forwarding from [::1]:27777 -> 7777
+    Handling connection for 27777
+    Handling connection for 27777
+    ```
+    
 
