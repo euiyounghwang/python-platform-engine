@@ -71,7 +71,7 @@
     Handling connection for 27777
     Handling connection for 27777
     ```
-- __Minikube dashboard : Access the Kubernetes dashboard running within the minikube cluster__
+- __Minikube dashboard (<i>http://127.0.0.1:53068/api/v1/namespaces/kubernetes-dashboard/services/http:kubernetes-dashboard:/proxy/#/workloads?namespace=default</i>): Access the Kubernetes dashboard running within the minikube cluster__
 ![Alt text](../screenshot/minikube-dashboard.png)
     
 
