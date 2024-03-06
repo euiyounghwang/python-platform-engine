@@ -92,6 +92,21 @@
     http://127.0.0.1:56552
     ❗  Because you are using a Docker driver on darwin, the terminal needs to be open to run it.
     
+     Kubernetes git:(master) minikube service fastapi-basic
+    |-----------|---------------|-------------|---------------------------|
+    | NAMESPACE |     NAME      | TARGET PORT |            URL            |
+    |-----------|---------------|-------------|---------------------------|
+    | default   | fastapi-basic |        7777 | http://192.168.49.2:30663 |
+    |-----------|---------------|-------------|---------------------------|
+    🏃  Starting tunnel for service fastapi-basic.
+    |-----------|---------------|-------------|------------------------|
+    | NAMESPACE |     NAME      | TARGET PORT |          URL           |
+    |-----------|---------------|-------------|------------------------|
+    | default   | fastapi-basic |             | http://127.0.0.1:59558 |
+    |-----------|---------------|-------------|------------------------|
+    🎉  Opening service default/fastapi-basic in default browser...
+    ❗  Because you are using a Docker driver on darwin, the terminal needs to be open to run it.
+    
     ```
 - __Minikube dashboard (<i>http://127.0.0.1:53068/api/v1/namespaces/kubernetes-dashboard/services/http:kubernetes-dashboard:/proxy/#/workloads?namespace=default</i>): Access the Kubernetes dashboard running within the minikube cluster__
 ![Alt text](../screenshot/minikube-dashboard.png)
