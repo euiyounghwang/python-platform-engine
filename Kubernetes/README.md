@@ -68,7 +68,8 @@
     NAME                             READY   STATUS    RESTARTS   AGE
     fastapi-basic-846bf55898-kx48n   1/1     Running   0          7m23s
     
-    (.venv) ➜  python-fastapi-basic git:(master) kubectl expose deployment fastapi-basic --type=NodePort --port=7777
+    (.venv) ➜  python-fastapi-basic git:(master) kubectl expose deployment fastapi-basic --type=NodePort --port=27777
+    (.venv) ➜  python-fastapi-basic git:(master) kubectl expose deployment fastapi-basic --type=LoadBalancer --port=27777
     
     (.venv) ➜  python-fastapi-basic git:(master) kubectl port-forward fastapi-basic-846bf55898-kx48n 27777:7777                 
     Forwarding from 127.0.0.1:27777 -> 7777
