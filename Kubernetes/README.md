@@ -46,8 +46,12 @@
      - __Install local docker to minikube__:
     ```bash
     
-    (.venv) ➜  python-fastapi-basic git:(master) eval $(minikube docker-env)                                                                      
+    (.venv) ➜  python-fastapi-basic git:(master) eval $(minikube docker-env)
     Host added: /Users/euiyoung.hwang/.ssh/known_hosts ([127.0.0.1]:52981)
+    
+    (.venv) ➜  python-fastapi-basic git:(master) kubectl get nodes 
+    NAME       STATUS   ROLES           AGE    VERSION
+    minikube   Ready    control-plane   206d   v1.27.3
     
     (.venv) ➜  python-fastapi-basic git:(master) docker build -t fn-fastapi-basic-api:es .
     
@@ -70,6 +74,23 @@
     Forwarding from [::1]:27777 -> 7777
     Handling connection for 27777
     Handling connection for 27777
+    
+    (.venv) ➜  python-fastapi-basic git:(master) minikube service list                                
+    |----------------------|---------------------------|--------------|-----|
+    |      NAMESPACE       |           NAME            | TARGET PORT  | URL |
+    |----------------------|---------------------------|--------------|-----|
+    | default              | fastapi-basic             |         7777 |     |
+    | default              | kubernetes                | No node port |     |
+    | default              | test                      | No node port |     |
+    | kube-system          | kube-dns                  | No node port |     |
+    | kubernetes-dashboard | dashboard-metrics-scraper | No node port |     |
+    | kubernetes-dashboard | kubernetes-dashboard      | No node port |     |
+    |----------------------|---------------------------|--------------|-----|
+    
+    (.venv) ➜  python-fastapi-basic git:(master) minikube service fastapi-basic --url
+    http://127.0.0.1:56552
+    ❗  Because you are using a Docker driver on darwin, the terminal needs to be open to run it.
+    
     ```
 - __Minikube dashboard (<i>http://127.0.0.1:53068/api/v1/namespaces/kubernetes-dashboard/services/http:kubernetes-dashboard:/proxy/#/workloads?namespace=default</i>): Access the Kubernetes dashboard running within the minikube cluster__
 ![Alt text](../screenshot/minikube-dashboard.png)
