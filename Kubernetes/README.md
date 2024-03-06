@@ -46,6 +46,7 @@
      - __Install local docker to minikube__:
     ```bash
     
+    # repository does not exist or may require docker login: denied
     (.venv) ➜  python-fastapi-basic git:(master) eval $(minikube docker-env)
     Host added: /Users/euiyoung.hwang/.ssh/known_hosts ([127.0.0.1]:52981)
     
