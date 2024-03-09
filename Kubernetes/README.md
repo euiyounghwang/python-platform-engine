@@ -14,6 +14,32 @@
     - Start your cluster
     ```bash
     minikube start
+    
+    Or (Windows Version)
+    $ minikube start --cpus=2 --memory=4g --disk-size=100g --driver=docker --kubernetes-version=v1.28
+😄  Microsoft Windows 10 Pro 10.0.19045.3693 Build 19045.3693 의 minikube v1.32.0
+    ..
+    X Exiting due to PROVIDER_DOCKER_VERSION_EXIT_1: "docker version --format <no value>-<no value>:<no value>" exit status 1: request returned Internal Server 
+    Error for API route and version http://%2F%2F.%2Fpipe%2Fdocker_engine/v1.24/version, check if the server supports the requested API version
+    
+     ~ docker context ls
+    NAME                TYPE                DESCRIPTION                               DOCKER ENDPOINT                                        KUBERNETES     
+    ENDPOINT   ORCHESTRATOR
+    default *           moby                Current DOCKER_HOST based configuration   tcp://127.0.0.1:58291
+    desktop-linux       moby                Docker Desktop                            unix:///Users/euiyoung.hwang/.docker/run/docker.sock
+    
+    $ docker context use desktop-linux
+    desktop-linux
+    Current context is now "desktop-linux"
+    
+    $ minikube status
+    minikube
+    type: Control Plane
+    host: Running
+    kubelet: Running
+    apiserver: Running
+    kubeconfig: Configured
+
     ```
     - __Interact with your cluster__
     ```bash
