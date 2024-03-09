@@ -17,12 +17,12 @@
     
     Or (Windows Version)
     $ minikube start --cpus=2 --memory=4g --disk-size=100g --driver=docker --kubernetes-version=v1.28
-😄  Microsoft Windows 10 Pro 10.0.19045.3693 Build 19045.3693 의 minikube v1.32.0
+    Microsoft Windows 10 Pro 10.0.19045.3693 Build 19045.3693 의 minikube v1.32.0
     ..
     X Exiting due to PROVIDER_DOCKER_VERSION_EXIT_1: "docker version --format <no value>-<no value>:<no value>" exit status 1: request returned Internal Server 
     Error for API route and version http://%2F%2F.%2Fpipe%2Fdocker_engine/v1.24/version, check if the server supports the requested API version
     
-     ~ docker context ls
+    ~ docker context ls
     NAME                TYPE                DESCRIPTION                               DOCKER ENDPOINT                                        KUBERNETES     
     ENDPOINT   ORCHESTRATOR
     default *           moby                Current DOCKER_HOST based configuration   tcp://127.0.0.1:58291
@@ -39,7 +39,6 @@
     kubelet: Running
     apiserver: Running
     kubeconfig: Configured
-
     ```
     - __Interact with your cluster__
     ```bash
@@ -93,6 +92,12 @@
     (.venv) ➜  python-fastapi-basic git:(master) kubectl get pods
     NAME                             READY   STATUS    RESTARTS   AGE
     fastapi-basic-846bf55898-kx48n   1/1     Running   0          7m23s
+    
+    ➜  python-platform-engine git:(master) kubectl get svc 
+    NAME            TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+    fastapi-basic   NodePort    10.108.79.85   <none>        7777:30663/TCP   3d20h
+    kubernetes      ClusterIP   10.96.0.1      <none>        443/TCP          209d
+    test            ClusterIP   10.98.250.16   <none>        8081/TCP         209d
     
     (.venv) ➜  python-fastapi-basic git:(master) kubectl expose deployment fastapi-basic --type=NodePort --port=27777
     (.venv) ➜  python-fastapi-basic git:(master) kubectl expose deployment fastapi-basic --type=LoadBalancer --port=27777
