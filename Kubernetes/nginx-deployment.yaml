@@ -1,45 +1,31 @@
-
-# $ kubectl create namespace my-namespace
-# $ kubectl config set-context $(kubectl config current-context) --namespace=my-namespace
-
-# $ kubectl apply -f nginx-deployment.yaml
-# $ kubectl get all
-
-# $ minikube ip
-# $ curl -s $(minikube ip):30080
-
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Pod
 metadata:
-  name: nginx-deployment
   labels:
-    app: nginx
+    run: nginx
+  name: nginx
+  namespace: default
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: nginx
-  template:
-    metadata:
-      labels:
-        app: nginx
-    spec:
-      containers:
-        - name: nginx
-      image: nginx:latest
-      ports:
-        - containerPort: 80
+  containers:
+  - name: nginx
+    image: docker.io/nginx:alpine
+    ports:
+    - containerPort: 80
+      protocol: TCP
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-service
+  labels:
+    run: nginx
+  name: nginx
+  namespace: default
 spec:
-  selector:
-    app: nginx
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-      nodePort: 30080
-  # type: NodePort
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: nginx
+  sessionAffinity: None
+  type: ClusterIP
