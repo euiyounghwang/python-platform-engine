@@ -1,0 +1,43 @@
+
+# $ kubectl apply -f omni-es-deployment.yaml
+# $ kubectl get all
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: fn-cicd-basic-api-elasticsearch
+  name: fn-cicd-basic-api-elasticsearch
+  namespace: default
+spec:
+  containers:
+  - name: fn-cicd-basic-api-elasticsearch
+    image: fn-cicd-basic-api:omni_es
+    resources:
+      requests:
+        memory: 1Gi
+        # cpu: "250m"
+      limits:
+        memory: 1Gi
+        # cpu: "500m"
+    ports:
+    - containerPort: 9201
+      protocol: TCP
+      
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: fn-cicd-basic-api-elasticsearch
+  name: fn-cicd-basic-api-elasticsearch
+  namespace: default
+spec:
+  type: NodePort
+  ports:
+  - port: 9201
+    protocol: TCP
+  selector:
+    run: fn-cicd-basic-api-elasticsearch
+  sessionAffinity: None

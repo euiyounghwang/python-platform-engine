@@ -156,8 +156,47 @@
     
     ➜  Kubernetes git:(master) ✗ kubectl apply -f ./fastapi-basic-deployment.yaml
     pod/fastapi-basic created
+    
+    kubectl delete pod/nginx
 
     ```
+    
+    - __To install elasticsearch as omni-es into minikube cluster__:
+    ```bash    
+    ➜  ~ eval $(minikube docker-env)
+    Host added: /Users/euiyoung.hwang/.ssh/known_hosts ([127.0.0.1]:49666)
+    
+    # rebuild Dockerfile into minikube
+    python-CICD-fastapi-basic git:(master) ./docker-build.sh
+    [+] Building 23.2s (13/13) FINISHED                                                                                                          docker:default
+    => [internal] load build definition from Dockerfile                                                                                                   0.0s
+    => => transferring dockerfile: 1.75kB                                                                                                                 0.0s
+    ..
+    
+    ➜  python-CICD-fastapi-basic git:(master) docker images
+    REPOSITORY                                TAG       IMAGE ID       CREATED              SIZE
+    fn-cicd-basic-api                         omni_es   5e2bff0e1f34   15 seconds ago       779MB
+    fn-cicd-basic-api                         es        3a46beaba0bb   About a minute ago   1.07GB
+    fn-fastapi-basic-api                      es        5436923ba41f   5 days ago           1.04GB
+    nginx                                     alpine    be5e6f23a990   3 weeks ago          43.6MB
+    
+    ➜  Kubernetes git:(master) ✗ kubectl apply -f omni-es-deployment.yaml
+    pod/fn-cicd-basic-api-elasticsearch unchanged
+    service/fn-cicd-basic-api-elasticsearch created
+    
+    ➜  Kubernetes git:(master) ✗ kubectl port-forward service/fn-cicd-basic-api-elasticsearch 9229:9201
+    Forwarding from 127.0.0.1:9229 -> 9201
+    Forwarding from [::1]:9229 -> 9201
+    Handling connection for 9229
+    Handling connection for 9229
+    E0310 18:46:26.312494   62369 portforward.go:409] an error occurred forwarding 9229 -> 9201: error forwarding port 9201 to pod 33f052e2245965d80a4d9e8ca5cfa8680da11d914db8cb1638fe288ac048f542, uid : exit status 1: 2024/03/10 23:46:26 socat[130339] E connect(5, AF=2 127.0.0.1:9201, 16): Connection refused
+    error: lost connection to pod
+
+    ➜  Kubernetes git:(master) ✗ kubectl delete pod/fn-cicd-basic-api-elasticsearch
+    pod "fn-cicd-basic-api-elasticsearch" deleted
+    ```
+
+
 - __Minikube dashboard (<i>http://127.0.0.1:53068/api/v1/namespaces/kubernetes-dashboard/services/http:kubernetes-dashboard:/proxy/#/workloads?namespace=default</i>): Access the Kubernetes dashboard running within the minikube cluster__
 ![Alt text](../screenshot/minikube-dashboard.png)
     
