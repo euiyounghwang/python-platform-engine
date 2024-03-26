@@ -45,8 +45,8 @@ services:
       - reindex.remote.whitelist=${NODE_WHITE_LIST}
     volumes:
       - data:/usr/share/elasticsearch/data
-      # - ./Docker/elasticsearch/backup:/usr/share/elasticsearch/backup
-      # - ./Docker/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - ./backup:/usr/share/elasticsearch/backup
+      - ./config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
     healthcheck:
       test: ["CMD", "curl","-s" ,"-f", "http://localhost:9201/_cat/health"]
     networks:
