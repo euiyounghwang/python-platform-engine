@@ -45,7 +45,7 @@ services:
       - reindex.remote.whitelist=${NODE_WHITE_LIST}
     volumes:
       - data:/usr/share/elasticsearch/data
-      # - ./Docker/elasticsearch/backup:/usr/share/elasticsearch/backup
+      - ./Docker/elasticsearch/backup:/usr/share/elasticsearch/backup
       # - ./Docker/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
     healthcheck:
       test: ["CMD", "curl","-s" ,"-f", "http://localhost:9201/_cat/health"]
@@ -55,7 +55,7 @@ services:
   
   fn-platform-basic-kibana:
     image: docker.elastic.co/kibana/kibana:8.8.0
-    container_name: fn-platform-basic-omni_es
+    container_name: fn-platform-basic-kibana
     ports:
       - 15601:5601
     networks:
