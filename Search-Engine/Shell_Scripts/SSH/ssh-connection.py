@@ -4,8 +4,8 @@ import logging
 
 # logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
-# server_file = "C://Users//euiyoung.hwang/server"
-server_file = "C://Users//euiyoung.hwang/server_test"
+server_file = "C://Users//euiyoung.hwang/server"
+# server_file = "C://Users//euiyoung.hwang/server_test"
 
 credentials_file = "C://Users//euiyoung.hwang/ssh_credentials"
 

@@ -29,7 +29,7 @@ function activate_virtual_env() {
     # # Python 3.11.7 with Window
     # pip install poetry
     # poetry install
-    echo "Finish Poetry Environment Completely.."
+    # echo "Finish Poetry Environment Completely.."
 }
 
 if [ -d $SCRIPTDIR/$VENV ]; then
