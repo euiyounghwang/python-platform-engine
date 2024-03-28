@@ -11,13 +11,25 @@ function activate_virtual_env() {
     # Create virtualenv
     python -m venv $SCRIPTDIR/$VENV
     
-    source $SCRIPTDIR/$VENV/bin/activate
-    echo "Created virtual enviroment >>" + $SCRIPTDIR/$VENV/bin/activate
+    # Python 3.11.7 with Window
+    if [ -d "$VENV/bin" ]; then
+        source $SCRIPTDIR/$VENV/bin/activate
+    else
+        source $SCRIPTDIR/$VENV/Scripts/activate
+    fi
     
+    echo "Created virtual enviroment >>" + $SCRIPTDIR/$VENV/bin/activate
+
     echo "Install requirements.txt"
-    pip install --upgrade pip
+    # pip install --upgrade pip
     pip install -r $SCRIPTDIR/requirements.txt
     echo "Install Completely.."
+    
+    # echo "Create Poetry Environment"
+    # # Python 3.11.7 with Window
+    # pip install poetry
+    # poetry install
+    # echo "Finish Poetry Environment Completely.."
 }
 
 if [ -d $SCRIPTDIR/$VENV ]; then
@@ -26,6 +38,3 @@ if [ -d $SCRIPTDIR/$VENV ]; then
 fi
 
 activate_virtual_env
-
-
-

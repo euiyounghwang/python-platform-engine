@@ -37,10 +37,10 @@ def work(es_source_client, es_target_client, src_idx, dest_idx):
     es_client = es_obj_s.get_es_instance()
     
     es_obj_t = Search(host=es_target_client)
-    es_t_client = es_obj_s.get_es_instance()
+    es_t_client = es_obj_t.get_es_instance()
     
     body = {
-        "track_total_hits" : True,
+        # "track_total_hits" : True,
         "query": { 
             "match_all" : {}
         }
@@ -85,13 +85,25 @@ def work(es_source_client, es_target_client, src_idx, dest_idx):
     }'
     
     '''    
+    body = {
+        "track_total_hits" : True,
+        "query": { 
+            "match_all" : {}
+        }
+    }
+
+
     es_t_client.indices.refresh(index=dest_idx)
     rs = es_t_client.search(index=[dest_idx],
         body=body
     )
 
     logging.info('-'*10)
-    logging.info(f'Validation Search Size : {rs["hits"]["total"]["value"]}')
+    print(type(rs["hits"]["total"]), str(rs["hits"]["total"]))
+    if isinstance(rs["hits"]["total"], int):
+        logging.info(f'Validation Search Size : {rs["hits"]["total"]}')
+    else:
+        logging.info(f'Validation Search Size : {rs["hits"]["total"]["value"]}')
     logging.info('-'*10)
 
 
@@ -103,9 +115,9 @@ if __name__ == "__main__":
     '''
     parser = argparse.ArgumentParser(description="Index into Elasticsearch using this script")
     parser.add_argument('-e', '--es', dest='es', default="http://localhost:9209", help='host source')
-    parser.add_argument('-t', '--ts', dest='ts', default="http://localhost:9203", help='host target')
+    parser.add_argument('-t', '--ts', dest='ts', default="http://localhost:9292", help='host target')
     parser.add_argument('-s', '--source_index', dest='source_index', default="cp_recommendation_test", help='source_index')
-    parser.add_argument('-d', '--target_index', dest='target_index', default="cp_recommendation_test", help='target_index')
+    parser.add_argument('-d', '--target_index', dest='target_index', default="test", help='target_index')
     args = parser.parse_args()
     
     if args.es:
