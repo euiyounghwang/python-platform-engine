@@ -26,8 +26,7 @@ def ssh_connection_test(host):
         # Update the next three lines with your
         # server's information
 
-        username = "biadmin"
-        password = "Wh@Ask3dY0u"
+      
 
         client = paramiko.client.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
