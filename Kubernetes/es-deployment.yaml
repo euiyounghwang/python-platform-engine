@@ -17,7 +17,7 @@ spec:
           env:
             - name: discovery.type
               value: single-node
-          ports:
+          ports:3
             - containerPort: 9200
               protocol: TCP
           resources:
