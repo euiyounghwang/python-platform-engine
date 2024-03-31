@@ -16,9 +16,11 @@ services:
   cerebro:
     image: lmenezes/cerebro:0.9.4
     ports:
-      - "9009:9000"
+      - 9900:9000/tcp
     volumes:
-      - ./monitoring/cerebro/application.conf://opt/cerebro/conf/application.conf
+      - ../Monitoring/Cerebro/application.conf:/opt/cerebro/conf/application.conf
+    networks:
+      - bridge
       
   
   # docker run --name kibaba-run --network bridge -e "ELASTICSEARCH_URL=http://host.docker.internal:9209" -e "ES_JAVA_OPTS=-Xms1g -Xmx1g" -e "ELASTICSEARCH_HOSTS=http://host.docker.internal:9209" -p 5801:5601 docker.elastic.co/kibana/kibana:8.8.0
@@ -84,8 +86,8 @@ services:
     container_name: alertmanager
     privileged: true
     volumes:
-      - ./monitoring/alertmanager/alertmanager.yml:/alertmanager.yml
-      - ./monitoring/alertmanager/slack.tmpl:/slack.tmpl
+      - ../Monitoring/Alertmanager/alertmanager.yml:/alertmanager.yml
+      - ../Monitoring/Alertmanager/slack.tmpl:/slack.tmpl
     command:
       - '--config.file=/alertmanager.yml'
       - "--web.external-url=http://localhost:9093"
@@ -96,13 +98,14 @@ services:
   prometheus:
     image: prom/prometheus
     container_name: prometheus
+    user: root
     restart: unless-stopped
     ports:
       - 9091:9090
     volumes:
-      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ../Monitoring/Prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus:/prometheus
-      - ./monitoring/alertmanager/alert_rules.yml:/alertmanager/alert_rules.yml
+      - ../Monitoring/Alertmanager/alert_rules.yml:/alertmanager/alert_rules.yml
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.path=/prometheus
@@ -130,11 +133,11 @@ services:
     
   grafana:
     container_name: grafana-local
-    environment:
-      - GF_INSTALL_PLUGINS=alexanderzobnin-zabbix-app
-      - GF_RENDERING_SERVER_URL=http://host.docker.internal:8088/render
-      - GF_RENDERING_CALLBACK_URL=http://host.docker.internal:3001/
-      - GF_LOG_FILTERS= rendering:debug
+    # environment:
+    #   - GF_INSTALL_PLUGINS=alexanderzobnin-zabbix-app
+    #   - GF_RENDERING_SERVER_URL=http://host.docker.internal:8088/render
+    #   - GF_RENDERING_CALLBACK_URL=http://host.docker.internal:3001/
+    #   - GF_LOG_FILTERS= rendering:debug
     image: grafana/grafana:latest
     ports:
       - 3000:3000/tcp
