@@ -152,12 +152,24 @@ services:
       - "9009:9000"
     environment:
       KAFKA_BROKER_CONNECT: "kafka-1:9092"
+      # KAFKA_BROKERCONNECT: "kafka1:9092, kafka2:9092, kafka3:9092"
+      # JVM_OPTS: "-Xms64M -Xmx128M"
     depends_on:
       - kafka-1
       - kafka-2
     networks:
       - bridge
-  
+
+
+  kafka-dev-monitoring:
+    image: obsidiandynamics/kafdrop
+    restart: "no"
+    ports:
+      - "9010:9000"
+    environment:
+      KAFKA_BROKER_CONNECT: "tsgvm01080:9092"
+
+
   # http://localhost:9308/metrics    
   kafka-exporter:
     image: danielqsj/kafka-exporter 
