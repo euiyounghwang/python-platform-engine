@@ -161,15 +161,6 @@ services:
       - bridge
 
 
-  kafka-dev-monitoring:
-    image: obsidiandynamics/kafdrop
-    restart: "no"
-    ports:
-      - "9010:9000"
-    environment:
-      KAFKA_BROKER_CONNECT: "tsgvm01080:9092"
-
-
   # http://localhost:9308/metrics    
   kafka-exporter:
     image: danielqsj/kafka-exporter 
