@@ -2,6 +2,7 @@
 #-- JMX-Exporter for Kafka Cluster
 # ----------------------------------------
 
+# https://computingforgeeks.com/monitor-apache-kafka-with-prometheus-and-grafana/
 # http://localhost:7075/metrics
 
 ```bash
