@@ -1,6 +1,8 @@
 
 GET _cat/indices
 
+GET _cat/nodes?h=heap*&format=json
+
 GET _cluster/settings
 
 POST /_cluster/reroute
