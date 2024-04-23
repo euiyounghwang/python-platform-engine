@@ -1,6 +1,6 @@
 #!/bin/sh
-KAFDROP_TOOL_EXPORT_PATH=/home/biadmin/monitoring/
-JAVA_HOME=/home/biadmin/monitoring/jdk-22.0.1/
+KAFDROP_TOOL_EXPORT_PATH=/home/devuser/monitoring/
+JAVA_HOME=/home/devuser/monitoring/jdk-22.0.1/
 SERVICE_NAME=kafdrop-service
 KAFKA_HOST=localhost:9092,test:9092
 
