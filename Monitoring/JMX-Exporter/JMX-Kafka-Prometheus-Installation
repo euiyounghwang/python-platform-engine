@@ -1,6 +1,7 @@
 # ----------------------------------------
 #-- JMX-Exporter for Kafka Cluster
 # ----------------------------------------
+The JMX exporter can export from a wide variety of JVM-based applications, for example Kafka and Cassandra.
 
 # https://computingforgeeks.com/monitor-apache-kafka-with-prometheus-and-grafana/
 # http://localhost:7075/metrics
@@ -13,10 +14,9 @@ KAFKA_PATH=/my_local/kafka_2.11-0.11.0.0/
 PATH=$PATH:$KAFKA_PATH/bin
 PATH=$PATH:$JAVA_HOME/bin
 KAFKA_LOGS=/my_local/kafka_2.11-0.11.0.0/logs
+KAFKA_OPTS=" -javaagent:/home/devuser/monitoring/jmx-exporter/jmx_prometheus_javaagent-0.15.0.jar=7075:/home/devuser/monitoring/jmx-exporter/kafka_config.yml"
 
-# export KAFKA_HEAP_OPTS="-Xmx4G -Xms4G"
-export KAFKA_OPTS=" -javaagent:/home/devuser/monitoring/jmx-exporter/jmx_prometheus_javaagent-0.15.0.jar=7075:/home/devuser/monitoring/jmx-exporter/kafka_config.yml"
-
+export KAFKA_HEAP_OPTS="-Xmx4G -Xms4G"
 
 # See how we were called.
 case "$1" in
@@ -25,6 +25,7 @@ case "$1" in
         echo "Starting Zookeeper";
         nohup $KAFKA_PATH/bin/zookeeper-server-start.sh -daemon /$KAFKA_PATH/config/zookeeper.properties &
         echo "Starting Kafka";
+        export KAFKA_OPTS
         nohup $KAFKA_PATH/bin/kafka-server-start.sh -daemon /$KAFKA_PATH/config/server.properties &
         ;;
   stop)

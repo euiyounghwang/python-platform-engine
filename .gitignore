@@ -1,4 +1,5 @@
 Apache-Kafka/.venv/
+Apache-Kafka/backup/
 Monitoring/.venv/
 RabbitMQ/.venv/
 Monitoring/Curator/.venv/
@@ -8,3 +9,4 @@ Fabric/.venv/
 Search-Engine/Docker/elasticsearch/.venv/
 Search-Engine/prometheus/
 Search-Engine/Shell_Scripts/SSH/.venv/
+

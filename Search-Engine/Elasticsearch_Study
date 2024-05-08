@@ -1,4 +1,9 @@
 
+
+# sudo firewall-cmd --zone=public --add-port=9260/tcp --permanent
+# sudo firewall-cmd --reload
+
+
 GET _cat/indices
 
 GET _cluster/settings

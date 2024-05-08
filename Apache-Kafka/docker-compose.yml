@@ -2,8 +2,40 @@ version: '2'
 #docker-compose -f ./docker-compose.yml up or docker-compose up or docker-compose up -d
 name: kafka-cluster
 
+# https://github.com/mtpatter/postgres-kafka-demo/blob/master/docker-compose.yml
 # docker exec -it kafka-cluster-kafka-1-1 kafka-topics --bootstrap-server=localhost:9092 --create --topic test-topic --partitions 3 --replication-factor 1
 services:
+
+  # postgres:
+  #   image: debezium/postgres:11
+  #   container_name: postgres
+  #   environment:
+  #     POSTGRES_PASSWORD: postgres
+  #   command: postgres -c config_file=/home/config/postgresql.conf
+  #   ports:
+  #     - 5432:5432
+  #   volumes:
+  #     -./:/home/config
+  postgres:
+    image: postgres
+    # container_name: postgres-local
+    hostname: postgres
+    ports:
+      - 5432:5432
+    restart: always
+    volumes:
+      - ./backup:/var/lib/postgresql/data
+      # - ~/apps/postgres:/var/lib/postgresql/data
+      - ./pg_hba.conf:/etc/postgresql/pg_hba.conf
+    environment:
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    networks:
+      - bridge
+    
+      
+      
 
   zookeeper-1:
     image: confluentinc/cp-zookeeper:latest
@@ -31,6 +63,7 @@ services:
       - zookeeper-1
       - kafka-1
       - kafka-2
+      # - postgres
       # - schema_registry
     ports:
       - "8083:8083"
@@ -45,6 +78,8 @@ services:
       CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
       CONNECT_STATUS_STORAGE_TOPIC: docker-connect-status
       CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+      # CONNECT_INTERNAL_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      # CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       CONNECT_KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
       CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schema_registry:28081'
       CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
