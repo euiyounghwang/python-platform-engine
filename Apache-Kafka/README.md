@@ -82,7 +82,6 @@ Confluent Control Center delivers understanding and insight about the inner work
 
 - URl : http://localhost:9009/
 
-![Alt text](../screenshot/kafka-monitoring.png)
 
 
 ### Create Topic
@@ -142,7 +141,6 @@ Created topic test-topic.
 }
 ...
 ```
-![Alt text](../screenshot/kafka-logstash-elasticsearch.png)
 
 
 ### Kafka Cluster Monitoring using Prometheus/Kafka-Exporter
