@@ -1,0 +1,4 @@
+
+curl http://localhost:9090/api/v1/label/job/values | jq
+curl -X POST -g 'http://localhost:9090/api/v1/admin/tsdb/delete_series?match[]={job="name_of_old_job"}'
+curl -X POST -g 'http://localhost:9090/api/v1/admin/tsdb/delete_series?match={job="name_of_old_job"}'
