@@ -12,8 +12,20 @@ services:
   #127.0.0.1:6379> get home
   #127.0.0.1:6379> set home helloWorld
   
+  # https://velog.io/@es_seong/RabbitMQ-with-Python
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+        - bridge
+
   # docker run --name redis-local -p 6379:6379 -d redis
-  
   cache:
     image: redis:6.2-alpine
     container_name: redis-local

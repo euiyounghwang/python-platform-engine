@@ -1,14 +1,12 @@
 
-# Kafka Cluster with Elasticsearch
-- URl : <i>https://github.com/euiyounghwang/python-search_engine/tree/master/kafka</i>
-
+# Kafka/Zookeeper/Connect
 
 Apache Kafka is an open-source distributed event streaming platform used by thousands of companies for high-performance data pipelines, streaming analytics, data integration, and mission-critical applications. 
 
 A Kafka consumer is any application or process that processes data from Kafka topics (Collection of Messages). Consumers subscribe to topics, and Kafka ensures that each message within a topic is delivered to all subscribed consumers in a scalable and parallel manner. a Kafka consumer can listen to (and subscribe to) more than one topic. This capability is one of Kafka’s strengths.
 
 
-#### Using Python Virtual Environment
+### Using Python Virtual Environment
 ```bash
 python -m venv .venv
 source .venv/bin/activate
@@ -34,28 +32,7 @@ Install Completely..
   3) __Consumer__ : Kafka consumers are typically part of a consumer group. When multiple consumers are subscribed to a topic and belong to the same consumer group, each consumer in the group will receive messages from a different subset of the partitions in the topic.
 
 
-To start an Apache Kafka server, we’d first need to start a Zookeeper server.
-We can configure this dependency in a docker-compose.yml file, which will ensure that the Zookeeper server always starts before the Kafka server and stops after it.
-
-Let’s start the Kafka server by spinning up the containers using the docker-compose command:
-```bash
-$ docker-compose up -d
-Creating network "kafka_default" with the default driver
-Creating kafka_zookeeper_1 ... done
-Creating kafka_kafka_1     ... done
-```
-
-- Guide : <i>https://velog.io/@jskim/Muti-Broker-Kafka-Cluster%EC%99%80-%ED%86%B5%EC%8B%A0%ED%95%98%EB%8A%94-%EA%B0%84%EB%8B%A8%ED%95%9C-Producer-Consumer-%EB%A7%8C%EB%93%A4%EA%B8%B0, 
-https://www.baeldung.com/ops/kafka-docker-setup</i>
-
-
-For more stable environments, we’ll need a resilient setup. Let’s extend our docker-compose.yml file to create a multi-node Kafka cluster setup.
-A cluster setup for Apache Kafka needs to have redundancy for both Zookeeper servers and the Kafka servers.
-
-So, let’s add configuration for one more node each for Zookeeper and Kafka services into docker-compose.yml
-
-
-### Kafka Install
+### Kafka Cluster/Zookeeper/Connect Setup manually on Linux
 ```bash
 # Monitoring
 kafka-monitoring:

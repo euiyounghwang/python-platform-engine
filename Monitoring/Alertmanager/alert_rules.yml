@@ -248,7 +248,7 @@ groups:
         summary: Missing node in Elasticsearch cluster (instance {{ $labels.node }})
         description: "Missing node in Elasticsearch cluster"
         query: '`elasticsearch_cluster_health_number_of_nodes < 2`'
-    - alert: Elasticsearch Healthy Data Nodes
+    - alert: Elasticsearch Healthy Data Nodes ( < 2)
       expr: 'elasticsearch_cluster_health_number_of_data_nodes < 2'
       for: 15m
       labels:
