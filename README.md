@@ -80,3 +80,26 @@ cat ~/.ssh/id_rsa.pub
 25 6	* * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily )
 47 6	* * 7	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.weekly )
 52 6	1 * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly )
+```
+
+
+#### Git Command for error
+```bash
+...
+remote: Resolving deltas: 100% (6/6), completed with 6 local objects.
+remote: error: Trace: 57977d58ed15d040aace678150227d6582a702e34aba49f590201fd466a5e4b9
+remote: error: See https://gh.io/lfs for more information.
+remote: error: File Apache-Kafka/Download/jdk-22_linux-x64_bin.tar.gz is 186.44 MB; this exceeds GitHubs file size limit of 100.00 MB
+remote: error: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.
+To github.com:euiyounghwang/python-platform-engine.git
+ ! [remote rejected]   master -> master (pre-receive hook declined)
+error: failed to push some refs to 'github.com:euiyounghwang/python-platform-engine.git'
+...
+
+euiyoung.hwang@US-5CD4021CL1-L MINGW64 ~/Git_Workspace/python-platform-engine (master)
+$ git rm --cached Apache-Kafka/Download/jdk-22_linux-x64_bin.tar.gz
+rm 'Apache-Kafka/Download/jdk-22_linux-x64_bin.tar.gz'
+
+euiyoung.hwang@US-5CD4021CL1-L MINGW64 ~/Git_Workspace/python-platform-engine (master)
+$ git commit --amend -C HEAD
+```
