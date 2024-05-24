@@ -203,6 +203,9 @@ status.storage.replication.factor=1
 - Start Kafka Local Cluster : `/home/devuser/kafka_cluster/kafka-start.sh`
 - Create topic: /home/devuser/kafka_cluster/kafka_2.13-3.7.0/bin/kafka-topics.sh --create --topic testtopic --bootstrap-server localhost:9092
 - Validate topic : /home/devuser/kafka_cluster/kafka_2.13-3.7.0/bin/kafka-topics.sh --list --bootstrap-server localhost:9092
+- ISR check
+ /kafka_2.11-0.11.0.0/bin/kafka-topics.sh --describe --zookeeper localhost:2181,localhost1:2181,localhost2:2181 --topic test_queue
+
 ```
 
 - Producer : ./bin/kafka-console-producer.sh --topic testtopic --bootstrap-server localhost:9092

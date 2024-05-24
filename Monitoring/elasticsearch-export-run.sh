@@ -1,5 +1,5 @@
 #!/bin/sh
-ELASTICSEARCH_EXPORT_PATH=/home/biadmin/monitoring/elasticsearch_exporter-1.6.0.linux-386/
+ELASTICSEARCH_EXPORT_PATH=/home/devuser/monitoring/elasticsearch_exporter-1.6.0.linux-386/
 PATH=$PATH:$ELASTICSEARCH_EXPORT_PATH/bin
 SERVICE_NAME=elasticsearch-export-service
 
@@ -9,8 +9,8 @@ case "$1" in
         # Start daemon.
         echo "Starting $SERVICE_NAME";
         # for Dev ES Cluster
-        # nohup $ELASTICSEARCH_EXPORT_PATH/elasticsearch_exporter --es.uri=http://tsgvm00877:9200 --es.all --es.indices --es.timeout 20s --es.snapshots &
-        nohup $ELASTICSEARCH_EXPORT_PATH/elasticsearch_exporter --es.uri=http://tsgvm00877:9200 --es.all --es.indices --es.timeout 20s --es.snapshots &> /dev/null &
+        # nohup $ELASTICSEARCH_EXPORT_PATH/elasticsearch_exporter --es.uri=http://localhost:9200 --es.all --es.indices --es.timeout 20s --es.snapshots &
+        nohup $ELASTICSEARCH_EXPORT_PATH/elasticsearch_exporter --es.uri=http://localhost:9200 --es.all --es.indices --es.timeout 20s --es.snapshots &> /dev/null &
         ;;
   stop)
         # Stop daemons.
