@@ -1,5 +1,5 @@
 #!/bin/sh
-GRAFANA_EXPORT_PATH=/home/biadmin/monitoring/grafana-4.1.2-1486989747/
+GRAFANA_EXPORT_PATH=/home/devuser/monitoring/grafana-4.1.2-1486989747/
 PATH=$PATH:$GRAFANA_EXPORT_PATH/bin
 SERVICE_NAME=grafana-service
 

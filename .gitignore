@@ -8,5 +8,6 @@ Search-Engine/Docker/elasticsearch/backup/
 Fabric/.venv/
 Search-Engine/Docker/elasticsearch/.venv/
 Search-Engine/prometheus/
-Search-Engine/Shell_Scripts/SSH/.venv/
-
+Search-Engine/Shell_Scripts/SSH/.ven/
+.idea
+d
