@@ -227,6 +227,21 @@ Deletion of requested consumer groups ('Python_Kafka_Consumer_App_Job') was succ
 
 ```
 
+#### Kafka Offset
+```bash
+KAFKA_OFFSET COMMAND
+/home/kafka_2.11-0.11.0.0/bin/kafka-run-class.sh kafka.tools.GetOffsetShell --topic TEST_QUEUE  --broker-list localhost:9092,localhost1:92092,localhost2:9092
+
+When resetting the “kafka_offsets” you must do the following 1st:
+
+Stop spark job
+Stop the spark custom app/cluster
+Run command to get Kafka offsets from data transfer nodes
+Apply values to DB table “kafka_offsets”
+Start the spark custom app/cluster
+Start spark job 
+```
+
 
 ### Kafka Connect : Manually Setup
 
