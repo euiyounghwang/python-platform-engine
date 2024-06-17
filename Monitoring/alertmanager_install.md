@@ -2,6 +2,7 @@
 ```
 https://hippogrammer.tistory.com/260
 https://gist.github.com/Tumar/cd1ef5ecd88086d49d04d9a4205f4763
+https://github.com/prometheus/alertmanager/blob/main/api/v2/openapi.yaml
 ```
 
 ### Docker Version
