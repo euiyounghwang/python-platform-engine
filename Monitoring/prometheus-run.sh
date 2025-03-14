@@ -1,5 +1,5 @@
 #!/bin/sh
-PROMETHEUS_EXPORT_PATH=/home/biadmin/monitoring/prometheus-2.37.0.linux-amd64/
+PROMETHEUS_EXPORT_PATH=/home/devuser/monitoring/prometheus-2.37.0.linux-amd64/
 PATH=$PATH:$PROMETHEUS_EXPORT_PATH/bin
 SERVICE_NAME=prometheus-service
 

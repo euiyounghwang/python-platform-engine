@@ -11,6 +11,7 @@ case "$1" in
         # for Dev ES Cluster
         # nohup $ELASTICSEARCH_EXPORT_PATH/elasticsearch_exporter --es.uri=http://localhost:9200 --es.all --es.indices --es.timeout 20s --es.snapshots &
         nohup $ELASTICSEARCH_EXPORT_PATH/elasticsearch_exporter --es.uri=http://localhost:9200 --es.all --es.indices --es.timeout 20s --es.snapshots &> /dev/null &
+        # nohup $ELASTICSEARCH_EXPORT_PATH/elasticsearch_exporter --es.uri=https://test:1@localhost:9200 --es.all --es.indices --es.timeout 20s --es.snapshots --es.ssl-skip-verify &> /dev/null &
         ;;
   stop)
         # Stop daemons.
