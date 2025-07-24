@@ -195,6 +195,7 @@ def queue_background(database_object, db_run, master_tb, sql):
                 json_vw_name = database_object.excute_oracle_query(master_tb.format(process_name))
             
                 # - main sql
+                print('# sql last -> ', sql.format(json_vw_name, transform_str_json_to_get_keys(raw_json)))
                 result_json_value = database_object.excute_oracle_query(sql.format(json_vw_name, transform_str_json_to_get_keys(raw_json)))
                 print('# Result_json_value -> ', result_json_value)
             else:
